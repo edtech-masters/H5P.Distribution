@@ -150,6 +150,7 @@
 
 .h5p-branching-scenario .h5p-start-button,
 .h5p-end-button,
+.h5p-view-summary-button,
 .h5p-back-button,
 .h5p-nav-button {
   margin: 3rem 1rem 0rem 1rem;
@@ -165,7 +166,8 @@
 }
 
 .h5p-branching-scenario .h5p-start-button,
-.h5p-end-button {
+.h5p-end-button,
+.h5p-view-summary-button {
   padding: 0.9rem 1.5rem;
 }
 
@@ -176,6 +178,7 @@
 
 .h5p-branching-scenario .h5p-start-button:hover,
 .h5p-end-button:hover,
+.h5p-view-summary-button:hover,
 .h5p-nav-button:not(.h5p-disabled):hover {
   border-color: #b0f88f;
   color: #4b4c60;
@@ -184,6 +187,7 @@
 
 .h5p-branching-scenario .h5p-start-button:active,
 .h5p-end-button:active,
+.h5p-view-summary-button:active,
 .h5p-back-button:not(.h5p-disabled):active,
 .h5p-nav-button:not(.h5p-disabled):active {
   border-color: #9fe281;
@@ -237,7 +241,8 @@
   height: 5.250em;
 }
 .h5p-branching-scenario.h5p-medium-tablet-size .h5p-start-button,
-.h5p-branching-scenario.h5p-medium-tablet-size .h5p-end-button {
+.h5p-branching-scenario.h5p-medium-tablet-size .h5p-end-button,
+.h5p-branching-scenario.h5p-medium-tablet-size .h5p-view-summary-button {
   padding: 0.75rem 1.1rem;
 }
 .h5p-branching-scenario.h5p-medium-tablet-size .h5p-start-screen,
@@ -249,6 +254,7 @@
 }
 .h5p-branching-scenario.h5p-medium-tablet-size .h5p-start-button,
 .h5p-branching-scenario.h5p-medium-tablet-size .h5p-end-button,
+.h5p-branching-scenario.h5p-medium-tablet-size .h5p-view-summary-button,
 .h5p-branching-scenario.h5p-medium-tablet-size .h5p-back-button,
 .h5p-branching-scenario.h5p-medium-tablet-size .h5p-nav-button {
   font-size: 1rem;
