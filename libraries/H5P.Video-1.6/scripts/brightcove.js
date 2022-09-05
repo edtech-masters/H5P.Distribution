@@ -48,7 +48,7 @@ H5P.VideoBrightcove = (function ($) {
     var videoId = options.brightcoveVideoID;
     var $wrapper = $('<div/>').attr('id','curriki-player-wrapper');
     var brightcoveData = getId({videoId});
-    let videoJsTagId = 'curriki-brightcove';
+    let videoJsTagId = 'curriki-brightcove' + numInstances;
     var bcPlayerExternalSeeked = false;
 
     if (window.bcPlayerExternal) {
