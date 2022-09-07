@@ -602,7 +602,8 @@
         instance.contentId = H5P.createUUID();
         H5PIntegration.contents = {};
         H5PIntegration.contents['cid-' + instance.contentId] = {
-          'url': H5PIntegration.baseUrl + '/h5p/embed/' + instance.contentId
+          'url': H5PIntegration.baseUrl + '/h5p/embed/' + instance.contentId,
+          'metadata': params.metadata
         };
       } catch (e) {
         console.error(e);
