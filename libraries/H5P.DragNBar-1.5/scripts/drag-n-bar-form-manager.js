@@ -602,7 +602,7 @@
         instance.contentId = H5P.createUUID();
         H5PIntegration.contents = {};
         H5PIntegration.contents['cid-' + instance.contentId] = {
-          'url': 'http://dev.currikistudio.org/h5p/embed/' + instance.contentId
+          'url': H5PIntegration.baseUrl + '/h5p/embed/' + instance.contentId
         };
       } catch (e) {
         console.error(e);
