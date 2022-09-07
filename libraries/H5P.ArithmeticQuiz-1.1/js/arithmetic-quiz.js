@@ -66,8 +66,7 @@ H5P.ArithmeticQuiz = (function ($) {
       localStorage.setItem("XAPIEventObject",JSON.stringify(customProgressedEvent.data.statement.object));
       localStorage.setItem("XAPIEventContext",JSON.stringify(customProgressedEvent.data.statement.context));
       
-      const customEvent =
-      this.createXAPIEventTemplate("answered");
+      const customEvent = self.createXAPIEventTemplate("answered");
       if (customEvent.data.statement.object) {
         customEvent.setScoredResult(
           e.data.score,
