@@ -266,7 +266,7 @@ H5PEditor.FullscreenBar = (function ($) {
   const renderPreview = function (library, params) {
     const previewContentElement = H5P.jQuery('.h5p-preview-wrapper > .preview-container > .preview-content');
     try {
-      H5P.newRunnable(
+      var instance = H5P.newRunnable(
           {
             library: library,
             params: params.params,
@@ -279,6 +279,11 @@ H5PEditor.FullscreenBar = (function ($) {
             standalone: true
           }
       );
+      instance.contentId = H5P.createUUID();
+      H5PIntegration.contents = {};
+      H5PIntegration.contents['cid-' + instance.contentId] = {
+        'url': 'http://dev.currikistudio.org/h5p/embed/' + instance.contentId
+      };
     } catch (e) {
       console.error(e);
     }
