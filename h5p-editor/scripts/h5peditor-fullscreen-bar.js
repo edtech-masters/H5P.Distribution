@@ -245,10 +245,10 @@ H5PEditor.FullscreenBar = (function ($) {
 
     const previewWrapper = document.createElement('div');
     previewWrapper.classList.add('h5p-preview-wrapper');
-    previewWrapper.classList.add('h5p-frame');
 
     const previewContainer = document.createElement('div');
     previewContainer.classList.add('preview-container');
+    previewContainer.classList.add('h5p-frame');
 
     const previewContent = document.createElement('div');
     previewContent.classList.add('preview-content');

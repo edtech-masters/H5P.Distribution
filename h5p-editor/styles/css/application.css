@@ -84,6 +84,6 @@ select[name=h5peditor-library] {
   width: 100%;
 }
 
-.preview-container,
-.preview-content {
+.preview-container {
+  position: relative;
 }
