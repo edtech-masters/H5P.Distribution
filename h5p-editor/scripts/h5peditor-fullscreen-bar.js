@@ -164,6 +164,10 @@ H5PEditor.FullscreenBar = (function ($) {
           data: JSON.stringify(body),
           contentType: "application/json; charset=utf-8",
           success: function (libraryData) {
+                // set filtered params
+               if(libraryData.filtered && JSON.parse(libraryData.filtered)) {
+                 params.params = JSON.parse(libraryData.filtered);
+               }
               // Add CSS.
               if (libraryData.css !== undefined) {
                 libraryData.css.forEach(function (path) {
