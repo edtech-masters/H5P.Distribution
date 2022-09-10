@@ -440,10 +440,10 @@
 
   const canvasTop = function (canvas) {
     let canvasOffsetTop = $(canvas).offset().top;
-    const editorPreviewContainer = $('.h5p-preview-wrapper').offset();
+/*    const editorPreviewContainer = $('.h5p-preview-wrapper').offset();
     if (window.H5PEditor !== undefined && editorPreviewContainer) {
       canvasOffsetTop = canvasOffsetTop - editorPreviewContainer.top;
-    }
+    }*/
     return canvasOffsetTop;
   };
 
