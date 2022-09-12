@@ -287,7 +287,8 @@ H5PEditor.FullscreenBar = (function ($) {
       H5PIntegration.contents = {};
       H5PIntegration.contents['cid-' + instance.contentId] = {
         'url': H5PIntegration.baseUrl + '/h5p/embed/' + instance.contentId,
-        'metadata': params.metadata
+        'metadata': params.metadata,
+        'contentUrl': H5PEditor.filesPath
       };
     } catch (e) {
       console.error(e);
