@@ -269,10 +269,6 @@ H5PEditor.FullscreenBar = (function ($) {
 
   const renderPreview = function (library, params) {
     const previewContentElement = H5P.jQuery('.h5p-preview-wrapper > .preview-container > .preview-content');
-    const skipResizeLibraries = [
-        'H5P.ThreeImage'
-    ];
-    const currentLibMachineName = ns.libraryFromString(library).machineName;
     try {
       var instance = H5P.newRunnable(
           {
@@ -282,7 +278,7 @@ H5PEditor.FullscreenBar = (function ($) {
           },
           undefined,
           previewContentElement,
-          skipResizeLibraries.includes(currentLibMachineName),
+          undefined,
           {
             standalone: true
           }
