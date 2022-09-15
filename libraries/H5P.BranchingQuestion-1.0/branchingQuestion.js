@@ -135,6 +135,7 @@ H5P.BranchingQuestion = (function () {
             if (index2 >= 0 && currentAltHasFeedback) {
               nextScreen.feedback = currentAltParams.feedback;
             }
+            nextScreen.text = currentAltParams.text;
             self.trigger('navigated', nextScreen);
           }
         };
