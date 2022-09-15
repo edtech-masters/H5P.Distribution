@@ -101,10 +101,8 @@ H5P.EventDispatcher = (function () {
      *   Event listener
      * @param {Object} [thisArg]
      *   Optionally specify the this value when calling listener.
-     * @param {Number} executionOrder
-     *  Optional execution order of triggers
      */
-    this.on = function (type, listener, thisArg, executionOrder) {
+    this.on = function (type, listener, thisArg) {
       if (typeof listener !== 'function') {
         throw TypeError('listener must be a function');
       }
@@ -112,7 +110,7 @@ H5P.EventDispatcher = (function () {
       // Trigger event before adding to avoid recursion
       self.trigger('newListener', {'type': type, 'listener': listener});
 
-      var trigger = {'listener': listener, 'thisArg': thisArg, 'executionOrder': executionOrder};
+      var trigger = {'listener': listener, 'thisArg': thisArg};
       if (!triggers[type]) {
         // First
         triggers[type] = [trigger];
@@ -120,22 +118,6 @@ H5P.EventDispatcher = (function () {
       else {
         // Append
         triggers[type].push(trigger);
-      }
-
-      // sort the triggers for xapi to control the execution order
-      if (type === 'xAPI' && executionOrder) {
-        triggers[type].sort(function (a, b) {
-          if (a.executionOrder === null || a.executionOrder === undefined) {
-            return 1;
-          }
-          if (b.executionOrder === null || b.executionOrder === undefined) {
-            return -1;
-          }
-          if (a.executionOrder === b.executionOrder) {
-            return 0;
-          }
-          return a.executionOrder < b.executionOrder ? -1 : 1;
-        });
       }
     };
 
