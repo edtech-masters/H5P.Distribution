@@ -1,6 +1,6 @@
 H5P.BranchingQuestion = (function () {
 
-  function BranchingQuestion(parameters) {
+  function BranchingQuestion(parameters, contentId, extras) {
     var self = this;
     self.firstFocusable;
     self.lastFocusable;
@@ -304,6 +304,10 @@ H5P.BranchingQuestion = (function () {
       $container.append(questionContainer);
       this.container = $container[0];
     };
+
+    self.getTitle = function (){
+      return H5P.createTitle((extras.metadata && extras.metadata.title) ? extras.metadata.title : 'Branching Question');
+    }
   }
 
   return BranchingQuestion;
