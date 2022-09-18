@@ -250,7 +250,7 @@ H5P.BranchingQuestion = (function () {
       var xAPIEvent = this.createXAPIEventTemplate('answered');
       addQuestionToXAPI(xAPIEvent);
       xAPIEvent.setScoredResult(undefined, undefined, self, true);
-      xAPIEvent.data.statement.result.response = answered;
+      xAPIEvent.data.statement.result.response = answered + '';
       return {
         statement: xAPIEvent.data.statement
       };
