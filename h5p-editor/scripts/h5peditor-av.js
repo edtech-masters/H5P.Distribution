@@ -107,20 +107,20 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     const id = ns.getNextFieldId(this.field);
 
     var imageHtml =
-      '<ul class="file list-unstyled"></ul>' +
-      (self.field.widgetExtensions ? C.createTabbedAdd(self.field.type, self.field.widgetExtensions, id, self.field.description !== undefined) : C.createAdd(self.field.type, id, self.field.description !== undefined))
+        '<ul class="file list-unstyled"></ul>' +
+        (self.field.widgetExtensions ? C.createTabbedAdd(self.field.type, self.field.widgetExtensions, id, self.field.description !== undefined) : C.createAdd(self.field.type, id, self.field.description !== undefined))
 
     if (!this.field.disableCopyright) {
       imageHtml += '<a class="h5p-copyright-button" href="#">' + H5PEditor.t('core', 'editCopyright') + '</a>';
     }
 
     imageHtml += '<div class="h5p-editor-dialog">' +
-      '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
-      '</div>';
+        '<a href="#" class="h5p-close" title="' + H5PEditor.t('core', 'close') + '"></a>' +
+        '</div>';
 
     var html = H5PEditor.createFieldMarkup(this.field, imageHtml, id);
-
     var $container = $(html).appendTo($wrapper);
+
     this.$files = $container.children('.file');
     this.$add = $container.children('.h5p-add-file').click(function () {
       self.$addDialog.addClass('h5p-open');
@@ -246,24 +246,24 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     });
 
     this.$addDialog.find('.h5p-file-drop-upload')
-      .addClass('has-advanced-upload')
-      .on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-      })
-      .on('dragover dragenter', function (e) {
-        $(this).addClass('over');
-        e.originalEvent.dataTransfer.dropEffect = 'copy';
-      })
-      .on('dragleave', function () {
-        $(this).removeClass('over');
-      })
-      .on('drop', function (e) {
-        self.uploadFiles(e.originalEvent.dataTransfer.files);
-      })
-      .click(function () {
-        self.openFileSelector();
-      });
+        .addClass('has-advanced-upload')
+        .on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        })
+        .on('dragover dragenter', function (e) {
+          $(this).addClass('over');
+          e.originalEvent.dataTransfer.dropEffect = 'copy';
+        })
+        .on('dragleave', function () {
+          $(this).removeClass('over');
+        })
+        .on('drop', function (e) {
+          self.uploadFiles(e.originalEvent.dataTransfer.files);
+        })
+        .click(function () {
+          self.openFileSelector();
+        });
 
     this.$insertButton = this.$addDialog.find('.h5p-insert').click(function () {
       if (isExtension(activeTab)) {
@@ -318,14 +318,11 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     var defaultQualityName = H5PEditor.t('core', 'videoQualityDefaultLabel', { ':index': index + 1 });
     var qualityName = (file.metadata && file.metadata.qualityName) ? file.metadata.qualityName : defaultQualityName;
 
-    // Check if source is YouTube
-    var youtubeRegex = C.providers.filter(function (provider) {
-      return provider.name === 'YouTube';
-    })[0].regexp;
-    var isYoutube = file.path && file.path.match(youtubeRegex);
+    // Check if source is provider (Vimeo, YouTube, Panopto)
+    const isProvider = file.path && C.findProvider(file.path);
 
     // Only allow single source if YouTube
-    if (isYoutube) {
+    if (isProvider) {
       // Remove all other files except this one
       that.$files.children().each(function (i) {
         if (i !== that.updateIndex) {
@@ -339,7 +336,7 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
       // This is now the first and only file
       index = 0;
     }
-    this.$add.toggleClass('hidden', !!isYoutube);
+    this.$add.toggleClass('hidden', isProvider);
 
     // If updating remove and recreate element
     if (that.updateIndex !== undefined) {
@@ -349,27 +346,27 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
 
     // Create file with customizable quality if enabled and not youtube
-    if (this.field.enableCustomQualityLabel === true && !isYoutube) {
+    if (this.field.enableCustomQualityLabel === true && !isProvider) {
       fileHtml = '<li class="h5p-av-row">' +
-        '<div class="h5p-thumbnail">' +
+          '<div class="h5p-thumbnail">' +
           '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
-            '<div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '">' +
+          '<div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '">' +
           '</div>' +
-        '</div>' +
-        '<div class="h5p-video-quality">' +
+          '</div>' +
+          '<div class="h5p-video-quality">' +
           '<div class="h5p-video-quality-title">' + H5PEditor.t('core', 'videoQuality') + '</div>' +
           '<label class="h5peditor-field-description" for="' + rowInputId + '">' + H5PEditor.t('core', 'videoQualityDescription') + '</label>' +
           '<input id="' + rowInputId + '" class="h5peditor-text" type="text" maxlength="60" value="' + qualityName + '">' +
-        '</div>' +
-      '</li>';
+          '</div>' +
+          '</li>';
     }
     else {
       fileHtml = '<li class="h5p-av-cell">' +
-        '<div class="h5p-thumbnail">' +
+          '<div class="h5p-thumbnail">' +
           '<div class="h5p-type" title="' + file.mime + '">' + file.mime.split('/')[1] + '</div>' +
           '<div role="button" tabindex="0" class="h5p-remove" title="' + H5PEditor.t('core', 'removeFile') + '">' +
-        '</div>' +
-      '</li>';
+          '</div>' +
+          '</li>';
     }
 
     // Insert file element in appropriate order
@@ -385,32 +382,32 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
 
     // Handle thumbnail click
     $file
-      .children('.h5p-thumbnail')
-      .click(function () {
-        if (!that.$add.is(':visible')) {
-          return; // Do not allow editing of file while uploading
-        }
-        that.$addDialog.addClass('h5p-open').find('.h5p-file-url').val(that.params[index].path);
-        that.updateIndex = index;
-      });
+        .children('.h5p-thumbnail')
+        .click(function () {
+          if (!that.$add.is(':visible')) {
+            return; // Do not allow editing of file while uploading
+          }
+          that.$addDialog.addClass('h5p-open').find('.h5p-file-url').val(that.params[index].path);
+          that.updateIndex = index;
+        });
 
     // Handle remove button click
     $file
-      .find('.h5p-remove')
-      .click(function () {
-        if (that.$add.is(':visible')) {
-          confirmRemovalDialog.show($file.offset().top);
-        }
+        .find('.h5p-remove')
+        .click(function () {
+          if (that.$add.is(':visible')) {
+            confirmRemovalDialog.show($file.offset().top);
+          }
 
-        return false;
-      });
+          return false;
+        });
 
     // on input update
     $file
-      .find('input')
-      .change(function () {
-        file.metadata = { qualityName: $(this).val() };
-      });
+        .find('input')
+        .change(function () {
+          file.metadata = { qualityName: $(this).val() };
+        });
 
     // Create remove file dialog
     var confirmRemovalDialog = new H5P.ConfirmationDialog({
@@ -468,12 +465,10 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
     else {
       // Try to find a provider
-      for (i = 0; i < C.providers.length; i++) {
-        if (C.providers[i].regexp.test(url)) {
-          mime = C.providers[i].name;
-          aspectRatio = C.providers[i].aspectRatio;
-          break;
-        }
+      const provider = C.findProvider(url);
+      if (provider) {
+        mime = provider.name;
+        aspectRatio = provider.aspectRatio;
       }
     }
 
@@ -565,13 +560,13 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.createInsertDialog = function (content, disableInsert, id, hasDescription) {
     return '<div role="button" tabindex="0" id="' + id + '"' + (hasDescription ? ' aria-describedby="' + ns.getDescriptionId(id) + '"' : '') + ' class="h5p-add-file" title="' + H5PEditor.t('core', 'addFile') + '"></div>' +
-      '<div class="h5p-dialog-anchor"><div class="h5p-add-dialog">' +
+        '<div class="h5p-dialog-anchor"><div class="h5p-add-dialog">' +
         '<div class="h5p-add-dialog-table">' + content + '</div>' +
         '<div class="h5p-buttons">' +
-          '<button class="h5peditor-button-textual h5p-insert"' + (disableInsert ? ' disabled' : '') + '>' + H5PEditor.t('core', 'insert') + '</button>' +
-          '<button class="h5peditor-button-textual h5p-cancel">' + H5PEditor.t('core', 'cancel') + '</button>' +
+        '<button class="h5peditor-button-textual h5p-insert"' + (disableInsert ? ' disabled' : '') + '>' + H5PEditor.t('core', 'insert') + '</button>' +
+        '<button class="h5peditor-button-textual h5p-cancel">' + H5PEditor.t('core', 'cancel') + '</button>' +
         '</div>' +
-      '</div></div>';
+        '</div></div>';
   };
 
   /**
@@ -582,20 +577,22 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * @returns {string} HTML
    */
   C.createTabContent = function (tab, type) {
+    const isAudio = (type === 'audio');
+
     switch (tab) {
       case 'BasicFileUpload':
         const id = 'av-upload-' + C.getNextId();
-        return '<h3 id="' + id + '">' + H5PEditor.t('core', type === 'audio' ? 'uploadAudioTitle' : 'uploadVideoTitle') + '</h3>' +
-          '<div class="h5p-file-drop-upload" tabindex="0" role="button" aria-labelledby="' + id + '">' +
-            '<div class="h5p-file-drop-upload-inner"/>' +
-          '</div>';
+        return '<h3 id="' + id + '">' + H5PEditor.t('core', isAudio ? 'uploadAudioTitle' : 'uploadVideoTitle') + '</h3>' +
+            '<div class="h5p-file-drop-upload" tabindex="0" role="button" aria-labelledby="' + id + '">' +
+            '<div class="h5p-file-drop-upload-inner ' + type + '"></div>' +
+            '</div>';
 
       case 'InputLinkURL':
-        return '<h3>' + H5PEditor.t('core', type === 'audio' ? 'enterAudioTitle' : 'enterVideoTitle') + '</h3>' +
-          '<div class="h5p-file-url-wrapper">' +
-            '<input type="text" placeholder="' + H5PEditor.t('core', type === 'audio' ? 'enterAudioUrl' : 'enterVideoUrl') + '" class="h5p-file-url h5peditor-text"/>' +
-          '</div>' +
-          (type === 'audio' ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
+        return '<h3>' + H5PEditor.t('core', isAudio ? 'enterAudioTitle' : 'enterVideoTitle') + '</h3>' +
+            '<div class="h5p-file-url-wrapper ' + type + '">' +
+            '<input type="text" placeholder="' + H5PEditor.t('core', isAudio ? 'enterAudioUrl' : 'enterVideoUrl') + '" class="h5p-file-url h5peditor-text"/>' +
+            '</div>' +
+            (isAudio ? '' : '<div class="h5p-errors"></div><div class="h5peditor-field-description">' + H5PEditor.t('core', 'addVideoDescription') + '</div>');
 
       default:
         return '';
@@ -636,8 +633,8 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
     }
 
     return C.createInsertDialog(
-      '<div class="av-tablist" role="tablist" aria-label="' + H5PEditor.t('core', 'avTablistLabel') + '">' + tabsHTML + '</div>' + tabpanelsHTML,
-      true, id, hasDescription
+        '<div class="av-tablist" role="tablist" aria-label="' + H5PEditor.t('core', 'avTablistLabel') + '">' + tabsHTML + '</div>' + tabpanelsHTML,
+        true, id, hasDescription
     );
   };
 
@@ -651,19 +648,19 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    */
   C.createAdd = function (type, id, hasDescription) {
     return C.createInsertDialog(
-      '<div class="h5p-dialog-box">' +
+        '<div class="h5p-dialog-box">' +
         C.createTabContent('BasicFileUpload', type) +
-      '</div>' +
-      '<div class="h5p-or-vertical">' +
+        '</div>' +
+        '<div class="h5p-or-vertical">' +
         '<div class="h5p-or-vertical-line"></div>' +
         '<div class="h5p-or-vertical-word-wrapper">' +
-          '<div class="h5p-or-vertical-word">' + H5PEditor.t('core', 'or') + '</div>' +
+        '<div class="h5p-or-vertical-word">' + H5PEditor.t('core', 'or') + '</div>' +
         '</div>' +
-      '</div>' +
-      '<div class="h5p-dialog-box">' +
-          C.createTabContent('InputLinkURL', type) +
-      '</div>',
-      false, id, hasDescription
+        '</div>' +
+        '<div class="h5p-dialog-box">' +
+        C.createTabContent('InputLinkURL', type) +
+        '</div>',
+        false, id, hasDescription
     );
   };
 
@@ -671,11 +668,37 @@ H5PEditor.widgets.video = H5PEditor.widgets.audio = H5PEditor.AV = (function ($)
    * Providers incase mime type is unknown.
    * @public
    */
-  C.providers = [{
-    name: 'YouTube',
-    regexp: /(?:https?:\/\/)?(?:www\.)?(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i,
-    aspectRatio: '16:9',
-  }];
+  C.providers = [
+    {
+      name: 'YouTube',
+      regexp: /(?:https?:\/\/)?(?:www\.)?(?:(?:youtube.com\/(?:attribution_link\?(?:\S+))?(?:v\/|embed\/|watch\/|(?:user\/(?:\S+)\/)?watch(?:\S+)v\=))|(?:youtu.be\/|y2u.be\/))([A-Za-z0-9_-]{11})/i,
+      aspectRatio: '16:9',
+    },
+    {
+      name: 'Panopto',
+      regexp: /^[^\/]+:\/\/([^\/]*panopto\.[^\/]+)\/Panopto\/.+\?id=(.+)$/i,
+      aspectRatio: '16:9',
+    },
+    {
+      name: 'Vimeo',
+      regexp: /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/,
+      aspectRatio: '16:9',
+    }
+  ];
+
+  /**
+   * Find & return an external provider based on the URL
+   *
+   * @param {string} url
+   * @returns {Object}
+   */
+  C.findProvider = function (url) {
+    for (i = 0; i < C.providers.length; i++) {
+      if (C.providers[i].regexp.test(url)) {
+        return C.providers[i];
+      }
+    }
+  };
 
   // Avoid ID attribute collisions
   let idCounter = 0;
