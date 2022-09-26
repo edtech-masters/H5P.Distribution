@@ -523,3 +523,7 @@
   font-size: xx-large;
   text-align: center;
 }
+
+.h5p-coursepresentation-editor .h5peditor-dragnbar .h5p-dragnbar-li .h5p-dragnbar-summary-button ~ .h5p-dragnbar-tooltip {
+  z-index: 3;
+}

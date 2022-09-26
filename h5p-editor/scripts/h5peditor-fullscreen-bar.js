@@ -164,6 +164,10 @@ H5PEditor.FullscreenBar = (function ($) {
           data: JSON.stringify(body),
           contentType: "application/json; charset=utf-8",
           success: function (libraryData) {
+                // set filtered params
+               if(libraryData.filtered && JSON.parse(libraryData.filtered)) {
+                 params.params = JSON.parse(libraryData.filtered);
+               }
               // Add CSS.
               if (libraryData.css !== undefined) {
                 libraryData.css.forEach(function (path) {
@@ -241,10 +245,10 @@ H5PEditor.FullscreenBar = (function ($) {
 
     const previewWrapper = document.createElement('div');
     previewWrapper.classList.add('h5p-preview-wrapper');
-    previewWrapper.classList.add('h5p-frame');
 
     const previewContainer = document.createElement('div');
     previewContainer.classList.add('preview-container');
+    previewContainer.classList.add('h5p-frame');
 
     const previewContent = document.createElement('div');
     previewContent.classList.add('preview-content');
@@ -266,7 +270,7 @@ H5PEditor.FullscreenBar = (function ($) {
   const renderPreview = function (library, params) {
     const previewContentElement = H5P.jQuery('.h5p-preview-wrapper > .preview-container > .preview-content');
     try {
-      H5P.newRunnable(
+      var instance = H5P.newRunnable(
           {
             library: library,
             params: params.params,
@@ -275,8 +279,17 @@ H5PEditor.FullscreenBar = (function ($) {
           undefined,
           previewContentElement,
           undefined,
-          undefined
+          {
+            standalone: true
+          }
       );
+      instance.contentId = H5P.createUUID();
+      H5PIntegration.contents = {};
+      H5PIntegration.contents['cid-' + instance.contentId] = {
+        'url': H5PIntegration.baseUrl + '/h5p/embed/' + instance.contentId,
+        'metadata': params.metadata,
+        'contentUrl': H5PEditor.filesPath
+      };
     } catch (e) {
       console.error(e);
     }

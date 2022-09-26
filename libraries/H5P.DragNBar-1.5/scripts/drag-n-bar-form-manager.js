@@ -476,6 +476,11 @@
         data: JSON.stringify(body),
         contentType: "application/json; charset=utf-8",
         success: function (libraryData) {
+          // set filtered params
+          if(libraryData.filtered && JSON.parse(libraryData.filtered)) {
+            params.params = JSON.parse(libraryData.filtered);
+          }
+
           // Add CSS.
           if (libraryData.css !== undefined) {
             libraryData.css.forEach(function (path) {
@@ -602,7 +607,8 @@
         instance.contentId = H5P.createUUID();
         H5PIntegration.contents = {};
         H5PIntegration.contents['cid-' + instance.contentId] = {
-          'url': 'http://dev.currikistudio.org/h5p/embed/' + instance.contentId
+          'url': H5PIntegration.baseUrl + '/h5p/embed/' + instance.contentId,
+          'metadata': params.metadata
         };
       } catch (e) {
         console.error(e);

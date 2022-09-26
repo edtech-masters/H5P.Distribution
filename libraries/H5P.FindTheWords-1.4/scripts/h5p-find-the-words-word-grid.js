@@ -366,7 +366,7 @@
    */
   const mouseDownEventHandler = function (e, canvas, elementSize) {
     const x = e.pageX - $(canvas).offset().left;
-    const y = e.pageY - $(canvas).offset().top;
+    const y = pageY(e) - canvasTop(canvas);
     return calculateCordinates(x, y, elementSize);
   };
 
@@ -384,9 +384,9 @@
    * @param {number} eSize  Current element size.
    */
   const mouseMoveEventHandler = function (e, canvas, srcPos, eSize) {
-    const offsetTop = ($(canvas).offset().top > eSize * 0.75) ? Math.floor(eSize * 0.75) : $(canvas).offset().top;
+    const offsetTop = (canvasTop(canvas) > eSize * 0.75) ? Math.floor(eSize * 0.75) : canvasTop(canvas);
     const desX = e.pageX - $(canvas).offset().left;
-    const desY = e.pageY - Math.abs(offsetTop);
+    const desY = pageY(e) - Math.abs(offsetTop);
     const context = canvas.getContext('2d');
 
     // Draw the current marking
@@ -417,9 +417,9 @@
    */
   const mouseUpEventHandler = function (e, canvas, elementSize, clickStart) {
     let wordObject = {};
-    const offsetTop = ($(canvas).offset().top > elementSize * 0.75) ? Math.floor(elementSize * 0.75) * (-1) : $(canvas).offset().top;
+    const offsetTop = (canvasTop(canvas) > elementSize * 0.75) ? Math.floor(elementSize * 0.75) * (-1) : canvasTop(canvas);
     const x = e.pageX - $(canvas).offset().left;
-    const y = e.pageY - Math.abs(offsetTop);
+    const y = pageY(e) - Math.abs(offsetTop);
     const clickEnd = calculateCordinates(x, y, elementSize);
     const context = canvas.getContext('2d');
 
@@ -436,6 +436,24 @@
     context.closePath();
     context.clearRect(0, 0, canvas.width, canvas.height);
     return wordObject;
+  };
+
+  const canvasTop = function (canvas) {
+    let canvasOffsetTop = $(canvas).offset().top;
+    const editorPreviewContainer = $('.h5p-preview-wrapper').offset();
+    if (window.H5PEditor !== undefined && editorPreviewContainer) {
+      canvasOffsetTop = canvasOffsetTop - editorPreviewContainer.top;
+    }
+    return canvasOffsetTop;
+  };
+
+  const pageY = function (e) {
+    let pageYEvent = e.pageY;
+    const editorPreviewContainer = $('.h5p-preview-wrapper').offset();
+    if (window.H5PEditor !== undefined && editorPreviewContainer) {
+      pageYEvent = pageYEvent - editorPreviewContainer.top;
+    }
+    return pageYEvent;
   };
 
   /**

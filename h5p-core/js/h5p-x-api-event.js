@@ -150,7 +150,7 @@ H5P.XAPIEvent.prototype.setObject = function (instance) {
     // but since there are no scripts that catch these events in the editor,
     // this is not a problem.
     this.data.statement.object = {
-      definition: {}
+      definition: { extensions: {} }
     };
   }
 };
