@@ -1083,22 +1083,12 @@ H5PEditor.CoursePresentation.prototype.updateNavigationLine = function (index) {
  *
  * @returns {Boolean} Indicates success
  */
-H5PEditor.CoursePresentation.prototype.removeSlide = function () {
+H5PEditor.CoursePresentation.prototype.removeSlide = function (skipConfirm = false) {
   var index = this.cp.$current.index();
   var $remove = this.cp.$current.add(this.cp.$currentKeyword);
   var isRemovingDnbContainer = this.cp.$current.index() === this.$dnbContainer.index();
 
-  const confirmationDialog = this.showConfirmationDialog({
-    headerText: H5PEditor.t('H5PEditor.CoursePresentation', 'confirmDeleteSlide'),
-    cancelText: H5PEditor.t('H5PEditor.CoursePresentation', 'cancel'),
-    confirmText: H5PEditor.t('H5PEditor.CoursePresentation', 'ok')
-  });
-
-  confirmationDialog.on('canceled', () => {
-    return;
-  });
-
-  confirmationDialog.on('confirmed', () => {
+  const doRemove = () => {
     // Remove elements from slide
     var slideKids = this.elements[index];
     if (slideKids !== undefined) {
@@ -1144,7 +1134,21 @@ H5PEditor.CoursePresentation.prototype.removeSlide = function () {
 
     this.trigger('removeSlide', index);
     this.updateSlidesSidebar();
-  });
+  };
+
+  if (skipConfirm) {
+    doRemove();
+  } else {
+    const confirmationDialog = this.showConfirmationDialog({
+      headerText: H5PEditor.t('H5PEditor.CoursePresentation', 'confirmDeleteSlide'),
+      cancelText: H5PEditor.t('H5PEditor.CoursePresentation', 'cancel'),
+      confirmText: H5PEditor.t('H5PEditor.CoursePresentation', 'ok')
+    });
+    confirmationDialog.on('canceled', () => {
+      return;
+    });
+    confirmationDialog.on('confirmed', doRemove);
+  }
 };
 
 /**
@@ -2295,18 +2299,28 @@ H5PEditor.CoursePresentation.prototype.showConfirmationDialog = function (dialog
     for(var i = 1; i <= pdf.numPages; i++) {
       const index = i;
       pdf.getPage(index).then((page) => {
-        var scale = 1.5;
+        var scale = 2;
         var viewport = page.getViewport({scale: scale});
+        var ar = viewport.width / viewport.height;
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
         var render_context = {
           canvasContext: ctx,
-          viewport: viewport
+          viewport: viewport,
+          background: 'black',
         };
         canvas.height = viewport.height;
         canvas.width = viewport.width;
+        canvas.width = (ar === 2) ? viewport.width : Math.floor((2 * viewport.width) / ar);
+        var blackBarWidth = (canvas.width - viewport.width) / 2;
         var renderTask = page.render(render_context);
         renderTask.promise.then(() => {
+          // Adding black bars to the side to preserve aspect ratio
+          ctx.drawImage(ctx.canvas, 0, 0, canvas.width-blackBarWidth, canvas.height, blackBarWidth, 0, canvas.width-blackBarWidth, canvas.height);
+          ctx.beginPath();
+          ctx.rect(0, 0, blackBarWidth, canvas.height);
+          ctx.fillStyle = "black";
+          ctx.fill();
           canvas.toBlob((blob) => {
             const formData = new FormData();
             formData.append("contentId", 0);
@@ -2357,6 +2371,14 @@ H5PEditor.CoursePresentation.prototype.addPdfSlides = function (slides, that) {
     }, 500 * i);
   });
   that.$uploading.addClass('h5p-hidden');
+  localStorage.removeItem('coursePresentationFromFile');
+  setTimeout(() => {
+    that.cp.jumpToSlide(0);
+    setTimeout(() => {
+      that.removeSlide(true);
+    }, 500);
+    that.removeSlide(true);
+  }, slides.length * 500);
 };
 /** @constant {Number} */
 H5PEditor.CoursePresentation.RATIO_SURFACE = 16 / 9;
