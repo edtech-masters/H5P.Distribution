@@ -4,14 +4,14 @@ H5P.Essay = function ($, Question) {
   'use strict';
 
   // CSS Classes
-  const SOLUTION_CONTAINER = 'h5p-essay-solution-container';
-  const SOLUTION_TITLE = 'h5p-essay-solution-title';
-  const SOLUTION_INTRODUCTION = 'h5p-essay-solution-introduction';
-  const SOLUTION_SAMPLE = 'h5p-essay-solution-sample';
-  const SOLUTION_SAMPLE_TEXT = 'h5p-essay-solution-sample-text';
+  var SOLUTION_CONTAINER = 'h5p-essay-solution-container';
+  var SOLUTION_TITLE = 'h5p-essay-solution-title';
+  var SOLUTION_INTRODUCTION = 'h5p-essay-solution-introduction';
+  var SOLUTION_SAMPLE = 'h5p-essay-solution-sample';
+  var SOLUTION_SAMPLE_TEXT = 'h5p-essay-solution-sample-text';
   
   // The H5P feedback right now only expects true (green)/false (red) feedback, not neutral feedback
-  const FEEDBACK_EMPTY= '<span class="h5p-essay-feedback-empty">...</span>';
+  var FEEDBACK_EMPTY= '<span class="h5p-essay-feedback-empty">...</span>';
 
   /**
    * @constructor
@@ -29,7 +29,7 @@ H5P.Essay = function ($, Question) {
     Question.call(this, 'essay');
 
     // Sanitize defaults
-    this.params = Essay.extend(
+    this.params = this.extend(
       {
         media: {},
         taskDescription: '',
