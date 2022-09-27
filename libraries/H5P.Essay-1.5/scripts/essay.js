@@ -144,6 +144,7 @@ H5P.Essay = function ($, Question) {
         }
       }
     }
+    console.log(new H5P.Essay.InputField());
     this.addInputFields();
     
     // Register Buttons
