@@ -144,29 +144,32 @@ H5P.Essay = function ($, Question) {
         }
       }
     }
-
-    // Create InputField
-    this.inputField = H5P.Essay.InputField({
-      'taskDescription': this.params.taskDescription,
-      'placeholderText': this.params.placeholderText,
-      'maximumLength': this.params.behaviour.maximumLength,
-      'remainingChars': this.params.remainingChars,
-      'inputFieldSize': this.params.behaviour.inputFieldSize
-    }, this.previousState);
-
-    // Register task introduction text
-    this.setIntroduction(this.inputField.getIntroduction());
-
-    // Register content
-    this.content = this.inputField.getContent();
-    this.setContent(this.content);
-
+    this.addInputFields();
+    
     // Register Buttons
     this.addButtons();
 
     // Init activity start time for XAPI
     this.activityStartTime = Date.now();
   };
+
+  Essay.prototype.addInputFields = function (){
+    var that = this;
+    // Create InputField
+    that.inputField = that.InputField({
+      'taskDescription': that.params.taskDescription,
+      'placeholderText': that.params.placeholderText,
+      'maximumLength': that.params.behaviour.maximumLength,
+      'remainingChars': that.params.remainingChars,
+      'inputFieldSize': that.params.behaviour.inputFieldSize
+    }, that.previousState);
+    // Register task introduction text
+    that.setIntroduction(that.inputField.getIntroduction());
+
+    // Register content
+    that.content = that.inputField.getContent();
+    that.setContent(that.content);
+  }
 
   /**
    * Add all the buttons that shall be passed to H5P.Question.
