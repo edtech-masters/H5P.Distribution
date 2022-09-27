@@ -1,7 +1,6 @@
 var H5P = H5P || {};
 
 H5P.Essay = function ($, Question) {
-  'use strict';
 
   // CSS Classes
   var SOLUTION_CONTAINER = 'h5p-essay-solution-container';
