@@ -324,7 +324,7 @@ H5P.Essay = function ($, Question) {
    */
   Essay.prototype.getMaxScore = function () {
     // Return value is rounded because reporting module for moodle's H5P plugin expects integers
-    return (this.params.behaviour.ignoreScoring) ? this.params.behaviour.pointsHost || 0 : Math.round(this.scoreMastering);
+    return (this.params.behaviour.ignoreScoring) ? this.params.behaviour.pointsHost || 1: Math.round(this.scoreMastering);
   };
 
   /**
@@ -887,7 +887,7 @@ H5P.Essay = function ($, Question) {
    * @return {Object} Current state.
    */
   Essay.prototype.getCurrentState = function () {
-    this.inputField.updateMessageSaved(this.params.messageSave);
+    // this.inputField.updateMessageSaved(this.params.messageSave);
 
     // We could have just used a string, but you never know when you need to store more parameters
     return {
