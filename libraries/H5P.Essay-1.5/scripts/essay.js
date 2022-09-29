@@ -324,7 +324,7 @@ H5P.Essay = function ($, Question) {
    */
   Essay.prototype.getMaxScore = function () {
     // Return value is rounded because reporting module for moodle's H5P plugin expects integers
-    return (this.params.behaviour.ignoreScoring) ? this.params.behaviour.pointsHost || 1: Math.round(this.scoreMastering);
+    return (this.params.behaviour.ignoreScoring) ? this.params.behaviour.pointsHost || 0 : Math.round(this.scoreMastering);
   };
 
   /**
@@ -887,13 +887,31 @@ H5P.Essay = function ($, Question) {
    * @return {Object} Current state.
    */
   Essay.prototype.getCurrentState = function () {
-    // this.inputField.updateMessageSaved(this.params.messageSave);
+    if (!this.inputField) {
+      return; // may not be attached to the DOM yet
+    }
 
-    // We could have just used a string, but you never know when you need to store more parameters
+    // No "saved" message when subcontent, requested by H5P core team
+    if (this.isRoot()) {
+      this.inputField.updateMessageSaved(this.params.messageSave);
+    }
+
     return {
-      'inputField': this.inputField.getText()
+      inputField: this.inputField.getText(),
+      viewState: this.viewState
     };
   };
+   /**
+   * Set view state.
+   * @param {string} state View state.
+   */
+    Essay.prototype.setViewState = function (state) {
+      if (Essay.VIEW_STATES.indexOf(state) === -1) {
+        return;
+      }
+  
+      this.viewState = state;
+    };
 
   /** @constant {string}
    * latin special chars: \u00C0-\u00D6\u00D8-\u00F6\u00F8-\u00FF
