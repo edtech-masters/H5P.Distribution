@@ -206,7 +206,14 @@ ns.widgets.image.prototype.addFile = function () {
       .children('.add')
       .click(function () {
         that.isOriginalImage = true;
-        that.openFileSelector();
+        // that.openFileSelector();
+        const data = {
+          callback: (imageFile) => {
+            that.upload(imageFile, imageFile.name);
+          }
+        };
+        const event = new CustomEvent('launchH5PImageUploadDialog', { detail: data } );
+        window.parent.dispatchEvent(event);
         return false;
       });
 
