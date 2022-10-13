@@ -182,6 +182,25 @@ ns.widgets.image.prototype.setCopyright = function (value) {
 };
 
 
+function handleImageUpload(imageFile, uploadCallback) {
+  if(imageFile.target && imageFile.target.files) {
+    const file = imageFile.target.files[0];
+    uploadCallback(file, file.name);
+  } else if(typeof imageFile === 'string' && imageFile.substr(0, 7) === 'http://' || path.substr(0, 8) === 'https://') {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", imageFile);
+    xhr.responseType = "blob";
+    xhr.onload = function() {
+      const blob = xhr.response;
+      const fileName =  imageFile.split('/').pop().split('#')[0].split('?')[0];
+      const file = new File([blob], fileName, blob);
+      uploadCallback(file, file.name);
+    }
+    xhr.send();
+  }
+  return undefined;
+}
+
 /**
  * Creates thumbnail HTML and actions.
  *
@@ -206,15 +225,19 @@ ns.widgets.image.prototype.addFile = function () {
       .children('.add')
       .click(function () {
         that.isOriginalImage = true;
-        // that.openFileSelector();
-        const data = {
-          callback: (imageFile) => {
-            that.upload(imageFile, imageFile.name);
-          }
-        };
-        const event = new CustomEvent('launchH5PImageUploadDialog', { detail: data } );
-        window.parent.dispatchEvent(event);
-        return false;
+        // temp fix to avoid QA block
+        if(window.parent.launchH5PImageUploadDialog) {
+          const data = {
+            callback: (imageFile) => {
+              handleImageUpload(imageFile, that.upload);
+            }
+          };
+          const event = new CustomEvent('launchH5PImageUploadDialog', { detail: data } );
+          window.parent.dispatchEvent(event);
+          return false;
+        }
+        that.openFileSelector();
+
       });
 
     // Remove edit image button
