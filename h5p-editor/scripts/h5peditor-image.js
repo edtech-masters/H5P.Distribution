@@ -186,7 +186,7 @@ function handleImageUpload(imageFile, uploadCallback) {
   if(imageFile.target && imageFile.target.files) {
     const file = imageFile.target.files[0];
     uploadCallback(file, file.name);
-  } else if(typeof imageFile === 'string' && imageFile.substr(0, 7) === 'http://' || path.substr(0, 8) === 'https://') {
+  } else if(typeof imageFile === 'string' && imageFile.substr(0, 7) === 'http://' || imageFile.substr(0, 8) === 'https://') {
     let xhr = new XMLHttpRequest();
     xhr.open("GET", imageFile);
     xhr.responseType = "blob";
