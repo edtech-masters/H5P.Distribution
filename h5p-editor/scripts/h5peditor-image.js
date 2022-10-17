@@ -184,7 +184,7 @@ ns.widgets.image.prototype.setCopyright = function (value) {
 
 function handleImageFileUploadEvent(that) {
   // temp fix to avoid QA block
-  if(window.parent.launchH5PImageUploadDialog) {
+  // if(window.parent.launchH5PImageUploadDialog) {
     const data = {
       callback: (imageFile) => {
         that.upload(imageFile, imageFile.name);
@@ -193,8 +193,8 @@ function handleImageFileUploadEvent(that) {
     const event = new CustomEvent('launchH5PImageUploadDialog', { detail: data } );
     window.parent.dispatchEvent(event);
     return false;
-  }
-  that.openFileSelector();
+  // }
+  //that.openFileSelector();
 }
 
 /**
