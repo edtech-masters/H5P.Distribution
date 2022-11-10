@@ -254,7 +254,7 @@ H5PEditor.CoursePresentation.prototype.appendTo = function ($wrapper) {
   this.$editor = this.$item.children('.editor');
   this.$errors = this.$item.children('.h5p-errors');
   this.$uploading = H5PEditor.$('<div>', {
-    'class': 'h5p-presentation-uploading h5p-hidden',
+    'class': 'h5p-presentation-uploading h5p-hidden form-manager-hidden',
     appendTo: $wrapper
   });
   // Create new presentation.
