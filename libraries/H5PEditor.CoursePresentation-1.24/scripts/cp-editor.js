@@ -2287,11 +2287,6 @@ H5PEditor.CoursePresentation.prototype.showConfirmationDialog = function (dialog
     var _PDF_DOC = PDFJS.getDocument({ url: uri });
   } else {
     var file = event;
-    if (localStorage.getItem('coursePresentationFromFile').indexOf('pdf') === -1){
-      console.log('processPdf: Invalid filetype');
-      return;
-    }
-
     var _PDF_DOC = PDFJS.getDocument({ data: atob(file.split(',')[1]) });
   }
   // Extracting images from pdf
