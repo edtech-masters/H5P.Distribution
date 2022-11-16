@@ -78,6 +78,12 @@
             "em",
             "code"
           ],
+          "font": {
+            "size": true,
+            "family": true,
+            "color": true,
+            "background": true
+          },
           "label": "Text",
           "importance": "high",
           "description": "Hint for the first part of the dialogue",
@@ -94,6 +100,12 @@
             "em",
             "code"
           ],
+          "font": {
+            "size": true,
+            "family": true,
+            "color": true,
+            "background": true
+          },
           "label": "Answer",
           "importance": "high",
           "description": "Hint for the second part of the dialogue",
@@ -111,6 +123,21 @@
           "name": "imageAltText",
           "type": "text",
           "label": "Alternative text for the image",
+          "importance": "high",
+          "optional": true
+        },
+        {
+          "name": "backimage",
+          "type": "image",
+          "label": "Back Image",
+          "importance": "high",
+          "optional": true,
+          "description": "Optional image for the back of the card."
+        },
+        {
+          "name": "backImageAltText",
+          "type": "text",
+          "label": "Alternative text for the back image",
           "importance": "high",
           "optional": true
         },

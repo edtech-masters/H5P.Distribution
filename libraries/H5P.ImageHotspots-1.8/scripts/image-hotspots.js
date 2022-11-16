@@ -225,35 +225,38 @@ H5P.ImageHotspots = (function ($, EventDispatcher) {
       self.$container.css('width', '');
     }
 
-    // If fullscreen, we have both a max width and max height.
-    if (!forceImageHeight && H5P.isFullscreen && height > containerHeight) {
-      height = containerHeight;
-      width = Math.floor((height/self.options.image.height) * self.options.image.width);
-    }
-
-    // Check if we need to apply semi full screen fix.
-    if (self.$container.is('.h5p-semi-fullscreen')) {
-
-      // Reset semi fullscreen width
-      self.$container.css('width', '');
-
-      // Decrease iframe size
-      if (!decreaseSize) {
-        self.$hotspotContainer.css('width', '10px');
-        self.$image.css('width', '10px');
-
-        // Trigger changes
-        setTimeout(function () {
-          self.trigger('resize', {decreaseSize: true});
-        }, 200);
+    // If fullscreen & standalone
+    if (this.isRoot() && H5P.isFullscreen) {
+      // If fullscreen, we have both a max width and max height.
+      if (!forceImageHeight && height > containerHeight) {
+        height = containerHeight;
+        width = Math.floor((height/self.options.image.height) * self.options.image.width);
       }
 
-      // Set width equal to iframe parent width, since iframe content has not been updated yet.
-      var $iframe = $(window.frameElement);
-      if ($iframe) {
-        var $iframeParent = $iframe.parent();
-        width = $iframeParent.width();
-        self.$container.css('width', width + 'px');
+      // Check if we need to apply semi full screen fix.
+      if (self.$container.is('.h5p-semi-fullscreen')) {
+
+        // Reset semi fullscreen width
+        self.$container.css('width', '');
+
+        // Decrease iframe size
+        if (!decreaseSize) {
+          self.$hotspotContainer.css('width', '10px');
+          self.$image.css('width', '10px');
+
+          // Trigger changes
+          setTimeout(function () {
+            self.trigger('resize', {decreaseSize: true});
+          }, 200);
+        }
+
+        // Set width equal to iframe parent width, since iframe content has not been updated yet.
+        var $iframe = $(window.frameElement);
+        if ($iframe) {
+          var $iframeParent = $iframe.parent();
+          width = $iframeParent.width();
+          self.$container.css('width', width + 'px');
+        }
       }
     }
 

@@ -48,8 +48,9 @@ H5P.VideoBrightcove = (function ($) {
     var videoId = options.brightcoveVideoID;
     var $wrapper = $('<div/>').attr('id','curriki-player-wrapper');
     var brightcoveData = getId({videoId});
-    let videoJsTagId = 'curriki-brightcove';
-    
+    let videoJsTagId = 'curriki-brightcove' + numInstances;
+    var bcPlayerExternalSeeked = false;
+
     if (window.bcPlayerExternal) {
       window.bcPlayerExternalDefaultWidth = window.bcPlayerExternal.currentWidth();
       window.bcPlayerExternalDefaultHeight = window.bcPlayerExternal.currentHeight();
@@ -106,7 +107,7 @@ H5P.VideoBrightcove = (function ($) {
       player = window.bcPlayerExternal ? window.bcPlayerExternal : window.videojs(videoJsTagId);
       player.tech_.off('dblclick');
       //************[start full screen]******************
-      player.getChild('controlBar').removeChild('FullscreenToggle');
+      /* player.getChild('controlBar').removeChild('FullscreenToggle');
       var FullscreenToggle = window.videojs.getComponent('FullscreenToggle');
       var CurrikiFullScreenButton = window.videojs.extend(FullscreenToggle, {
         constructor: function() {
@@ -118,11 +119,16 @@ H5P.VideoBrightcove = (function ($) {
         }
       });
       window.videojs.registerComponent('CurrikiFullScreenButton', CurrikiFullScreenButton);
-      player.getChild('controlBar').addChild('currikiFullScreenButton', {});
+      player.getChild('controlBar').addChild('currikiFullScreenButton', {}); */
       //************[end full screen]*********************
       
       if (window.bcPlayerExternal) {
         initializePlayerEvents();
+        player.on('seeked', function () {
+          bcPlayerExternalSeeked = true;
+          const time = self.parent.controls.$slider.slider('value');
+          self.parent.controls.$slider.slider('option','slide')({},{value: time});
+        });
         self.trigger('ready');
         self.trigger('loaded');
       } else {
@@ -159,7 +165,7 @@ H5P.VideoBrightcove = (function ($) {
 
       player.on('ended', function () {
         self.trigger('stateChange', H5P.Video.ENDED);
-      });
+      });      
     }
 
     /**
@@ -277,7 +283,8 @@ H5P.VideoBrightcove = (function ($) {
      * @param {Number} time
      */
     self.seek = function (time) {
-      if (!player || !player.currentTime) {
+      if (!player || !player.currentTime || (Boolean(window.bcPlayerExternal) && bcPlayerExternalSeeked)) {
+        bcPlayerExternalSeeked = false;
         return;
       }
       player.currentTime(time);
@@ -452,10 +459,11 @@ H5P.VideoBrightcove = (function ($) {
 
     // Respond to resize events by setting the YT player size.
     self.on('resize', function () {
-      
+      /*
       if (!$wrapper.is(':visible')) {
         return;
       }
+      */
 
       if (!player) {
         // Player isn't created yet. Try again.
@@ -464,8 +472,41 @@ H5P.VideoBrightcove = (function ($) {
       }
 
       if (window.bcPlayerExternal) {
+        
+        const aspectRatio = 1.778; // standard aspect ratio of video width and height
+        const currentHeight = window.bcPlayerExternal.currentHeight();
+        const adjustedWidthVal = currentHeight * aspectRatio;
+
         H5P.jQuery('#' + window.videoJsTagIdGlobal + ' video').addClass('video-restyle-streched')
         H5P.jQuery('#' + window.videoJsTagIdGlobal + ' video').removeClass('video-restyle-shrinked');
+
+
+        if (adjustedWidthVal <= window.bcPlayerExternal.currentWidth()) {
+          H5P.jQuery('.h5p-content').width(adjustedWidthVal);
+          H5P.jQuery('.h5p-content').height(currentHeight);
+          $wrapper.css({
+            width: adjustedWidthVal + 'px',
+            height: currentHeight + 'px'
+          });
+        } else {
+          const currentWidth = window.bcPlayerExternal.currentWidth();
+          const adjustedHeightVal = currentWidth / aspectRatio;
+          H5P.jQuery('.h5p-content').width(currentWidth);
+          H5P.jQuery('.h5p-content').height(adjustedHeightVal);
+          $wrapper.css({
+            width: currentWidth + 'px',
+            height: adjustedHeightVal + 'px'
+          });
+        }
+
+        if (H5P.instances.length) {
+          H5P.instances[0].resizeInteractions();
+        }
+        
+        /* 
+        H5P.jQuery('#' + window.videoJsTagIdGlobal + ' video').addClass('video-restyle-streched')
+        H5P.jQuery('#' + window.videoJsTagIdGlobal + ' video').removeClass('video-restyle-shrinked');
+        H5P.jQuery('#' + window.videoJsTagIdGlobal + ' video').height(Math.round(window.bcPlayerExternal.currentHeight()));
         
         if ( (Math.round(window.bcPlayerExternal.currentWidth()) > Math.round(H5P.jQuery('#' + window.videoJsTagIdGlobal + ' video').width())) ) {
           H5P.jQuery('.h5p-content').width(H5P.jQuery('#' + window.videoJsTagIdGlobal + ' video').width());
@@ -492,6 +533,7 @@ H5P.VideoBrightcove = (function ($) {
           H5P.jQuery('.h5p-content').removeAttr('style');
           H5P.jQuery($wrapper).removeAttr('style');
         }
+         */
       } else {
         $wrapper.css({
           width: 'inherit',

@@ -211,6 +211,8 @@ H5PEditor.language.core = {
   contributeTranslations: 'Si desea completar la traducción para :language, puede obtener información sobre <a href=":url" target="_new"> contribuir con traducciones al H5P </a>',
   unknownLibrary: 'Desafortunadamente, el tipo de contenido seleccionado \'%lib\' no está instalado en este sistema.',
   proceedButtonLabel: 'Proceed to save',
+  previewButtonLabel: 'Preview',
+  backToEditLabel: 'Back To Edit',
   enterFullscreenButtonLabel: 'Enter fullscreen',
   exitFullscreenButtonLabel: 'Exit fullscreen',
 };

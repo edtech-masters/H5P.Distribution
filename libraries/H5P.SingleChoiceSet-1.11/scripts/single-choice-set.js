@@ -179,6 +179,18 @@ H5P.SingleChoiceSet = (function ($, UI, Question, SingleChoice, SolutionView, Re
         return this;
       };
     })();
+
+    /**
+     * Overrides the set activity started method of the superclass (H5P.EventDispatcher) and calls it
+     * at the same time.
+     */
+    this.setActivityStarted = (function (original) {
+      return function () {
+        original.call(self);
+        self.resetStopWatch(self.currentIndex);
+        self.startStopWatch(self.currentIndex);
+      };
+    })(this.setActivityStarted);
   }
 
   SingleChoiceSet.prototype = Object.create(Question.prototype);
@@ -748,6 +760,17 @@ H5P.SingleChoiceSet = (function ($, UI, Question, SingleChoice, SolutionView, Re
   SingleChoiceSet.prototype.stopStopWatch = function (index) {
     if (this.stopWatches[index]) {
       this.stopWatches[index].stop();
+    }
+  };
+
+  /**
+   * Resets a stopwatch for indexed slide
+   *
+   * @param {number} index
+   */
+  SingleChoiceSet.prototype.resetStopWatch = function (index) {
+    if (this.stopWatches[index]) {
+      this.stopWatches[index].reset();
     }
   };
 

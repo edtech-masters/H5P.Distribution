@@ -459,10 +459,11 @@ H5P.VideoBrightcove = (function ($) {
 
     // Respond to resize events by setting the YT player size.
     self.on('resize', function () {
-      
+      /*
       if (!$wrapper.is(':visible')) {
         return;
       }
+      */
 
       if (!player) {
         // Player isn't created yet. Try again.
@@ -475,16 +476,28 @@ H5P.VideoBrightcove = (function ($) {
         const aspectRatio = 1.778; // standard aspect ratio of video width and height
         const currentHeight = window.bcPlayerExternal.currentHeight();
         const adjustedWidthVal = currentHeight * aspectRatio;
-        
+
         H5P.jQuery('#' + window.videoJsTagIdGlobal + ' video').addClass('video-restyle-streched')
         H5P.jQuery('#' + window.videoJsTagIdGlobal + ' video').removeClass('video-restyle-shrinked');
 
-        H5P.jQuery('.h5p-content').width(adjustedWidthVal);
-        H5P.jQuery('.h5p-content').height(currentHeight);
-        $wrapper.css({
-          width: adjustedWidthVal + 'px',
-          height: currentHeight + 'px'
-        });
+
+        if (adjustedWidthVal <= window.bcPlayerExternal.currentWidth()) {
+          H5P.jQuery('.h5p-content').width(adjustedWidthVal);
+          H5P.jQuery('.h5p-content').height(currentHeight);
+          $wrapper.css({
+            width: adjustedWidthVal + 'px',
+            height: currentHeight + 'px'
+          });
+        } else {
+          const currentWidth = window.bcPlayerExternal.currentWidth();
+          const adjustedHeightVal = currentWidth / aspectRatio;
+          H5P.jQuery('.h5p-content').width(currentWidth);
+          H5P.jQuery('.h5p-content').height(adjustedHeightVal);
+          $wrapper.css({
+            width: currentWidth + 'px',
+            height: adjustedHeightVal + 'px'
+          });
+        }
 
         if (H5P.instances.length) {
           H5P.instances[0].resizeInteractions();

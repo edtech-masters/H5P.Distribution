@@ -82,7 +82,7 @@ H5PEditor.CoursePresentation = function (parent, field, params, setValue) {
     }
     that.dnb.setCanPaste(canPaste);
   });
-  
+
   if (localStorage.getItem('coursePresentationFromFile') !== null) {
     setTimeout(() => {
       this.processPdf(localStorage.getItem('coursePresentationFromFile'), this);
@@ -254,7 +254,7 @@ H5PEditor.CoursePresentation.prototype.appendTo = function ($wrapper) {
   this.$editor = this.$item.children('.editor');
   this.$errors = this.$item.children('.h5p-errors');
   this.$uploading = H5PEditor.$('<div>', {
-    'class': 'h5p-presentation-uploading h5p-hidden',
+    'class': 'h5p-presentation-uploading h5p-hidden form-manager-hidden',
     appendTo: $wrapper
   });
   // Create new presentation.
@@ -283,11 +283,6 @@ H5PEditor.CoursePresentation.prototype.appendTo = function ($wrapper) {
     .appendTo($settingsWrapper);
 
   // Add and bind slide controls.
-  var pdfInput = H5PEditor.$('<input class="h5p-slidecontrols-pdfinput" type="file" accept=".pdf">');
-  pdfInput.change((event) => { that.processPdf(event, that) });
-  var pdfLabelContainer = H5PEditor.$('<label class="h5p-slidecontrols-button-pdf">PDF</label>');
-  pdfLabelContainer.append(pdfInput);
-  
   var slideControls = {
     $add: H5PEditor.$('<a href="#" aria-label="' + H5PEditor.t('H5PEditor.CoursePresentation', 'newSlide') + '" class="h5p-slidecontrols-button h5p-slidecontrols-button-add"></a>'),
     $clone: H5PEditor.$('<a href="#" aria-label="' + H5PEditor.t('H5PEditor.CoursePresentation', 'cloneSlide') + '" class="h5p-clone-slide h5p-slidecontrols-button h5p-slidecontrols-button-clone"></a>'),
@@ -295,7 +290,6 @@ H5PEditor.CoursePresentation.prototype.appendTo = function ($wrapper) {
     $sortLeft: H5PEditor.$('<a href="#" aria-label="' + H5PEditor.t('H5PEditor.CoursePresentation', 'sortSlide', {':dir': 'left'}) + '" class="h5p-slidecontrols-button h5p-slidecontrols-button-sort-left"></a>'),
     $sortRight: H5PEditor.$('<a href="#" aria-label="' + H5PEditor.t('H5PEditor.CoursePresentation', 'sortSlide', {':dir': 'right'}) + '" class="h5p-slidecontrols-button h5p-slidecontrols-button-sort-right"></a>'),
     $delete: H5PEditor.$('<a href="#" aria-label="' + H5PEditor.t('H5PEditor.CoursePresentation', 'removeSlide') + '" class="h5p-slidecontrols-button h5p-slidecontrols-button-delete"></a>'),
-    $pdf: pdfLabelContainer
   };
   this.slideControls = slideControls;
 
@@ -305,8 +299,7 @@ H5PEditor.CoursePresentation.prototype.appendTo = function ($wrapper) {
     slideControls.$background,
     slideControls.$sortLeft,
     slideControls.$sortRight,
-    slideControls.$delete,
-    slideControls.$pdf
+    slideControls.$delete
   ]).appendTo(this.cp.$wrapper)
     .children('a:first')
     .click(function () {
@@ -1090,22 +1083,12 @@ H5PEditor.CoursePresentation.prototype.updateNavigationLine = function (index) {
  *
  * @returns {Boolean} Indicates success
  */
-H5PEditor.CoursePresentation.prototype.removeSlide = function () {
+H5PEditor.CoursePresentation.prototype.removeSlide = function (skipConfirm = false) {
   var index = this.cp.$current.index();
   var $remove = this.cp.$current.add(this.cp.$currentKeyword);
   var isRemovingDnbContainer = this.cp.$current.index() === this.$dnbContainer.index();
 
-  const confirmationDialog = this.showConfirmationDialog({
-    headerText: H5PEditor.t('H5PEditor.CoursePresentation', 'confirmDeleteSlide'),
-    cancelText: H5PEditor.t('H5PEditor.CoursePresentation', 'cancel'),
-    confirmText: H5PEditor.t('H5PEditor.CoursePresentation', 'ok')
-  });
-
-  confirmationDialog.on('canceled', () => {
-    return;
-  });
-
-  confirmationDialog.on('confirmed', () => {
+  const doRemove = () => {
     // Remove elements from slide
     var slideKids = this.elements[index];
     if (slideKids !== undefined) {
@@ -1151,7 +1134,21 @@ H5PEditor.CoursePresentation.prototype.removeSlide = function () {
 
     this.trigger('removeSlide', index);
     this.updateSlidesSidebar();
-  });
+  };
+
+  if (skipConfirm) {
+    doRemove();
+  } else {
+    const confirmationDialog = this.showConfirmationDialog({
+      headerText: H5PEditor.t('H5PEditor.CoursePresentation', 'confirmDeleteSlide'),
+      cancelText: H5PEditor.t('H5PEditor.CoursePresentation', 'cancel'),
+      confirmText: H5PEditor.t('H5PEditor.CoursePresentation', 'ok')
+    });
+    confirmationDialog.on('canceled', () => {
+      return;
+    });
+    confirmationDialog.on('confirmed', doRemove);
+  }
 };
 
 /**
@@ -2290,11 +2287,6 @@ H5PEditor.CoursePresentation.prototype.showConfirmationDialog = function (dialog
     var _PDF_DOC = PDFJS.getDocument({ url: uri });
   } else {
     var file = event;
-    if (localStorage.getItem('coursePresentationFromFile').indexOf('pdf') === -1){
-      console.log('processPdf: Invalid filetype');
-      return;
-    }
-
     var _PDF_DOC = PDFJS.getDocument({ data: atob(file.split(',')[1]) });
   }
   // Extracting images from pdf
@@ -2302,18 +2294,28 @@ H5PEditor.CoursePresentation.prototype.showConfirmationDialog = function (dialog
     for(var i = 1; i <= pdf.numPages; i++) {
       const index = i;
       pdf.getPage(index).then((page) => {
-        var scale = 1.5;
+        var scale = 2;
         var viewport = page.getViewport({scale: scale});
+        var ar = viewport.width / viewport.height;
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
         var render_context = {
           canvasContext: ctx,
-          viewport: viewport
+          viewport: viewport,
+          background: 'black',
         };
         canvas.height = viewport.height;
         canvas.width = viewport.width;
+        canvas.width = (ar === 2) ? viewport.width : Math.floor((2 * viewport.width) / ar);
+        var blackBarWidth = (canvas.width - viewport.width) / 2;
         var renderTask = page.render(render_context);
         renderTask.promise.then(() => {
+          // Adding black bars to the side to preserve aspect ratio
+          ctx.drawImage(ctx.canvas, 0, 0, canvas.width-blackBarWidth, canvas.height, blackBarWidth, 0, canvas.width-blackBarWidth, canvas.height);
+          ctx.beginPath();
+          ctx.rect(0, 0, blackBarWidth, canvas.height);
+          ctx.fillStyle = "black";
+          ctx.fill();
           canvas.toBlob((blob) => {
             const formData = new FormData();
             formData.append("contentId", 0);
@@ -2364,6 +2366,14 @@ H5PEditor.CoursePresentation.prototype.addPdfSlides = function (slides, that) {
     }, 500 * i);
   });
   that.$uploading.addClass('h5p-hidden');
+  localStorage.removeItem('coursePresentationFromFile');
+  setTimeout(() => {
+    that.cp.jumpToSlide(0);
+    setTimeout(() => {
+      that.removeSlide(true);
+    }, 500);
+    that.removeSlide(true);
+  }, slides.length * 500);
 };
 /** @constant {Number} */
 H5PEditor.CoursePresentation.RATIO_SURFACE = 16 / 9;

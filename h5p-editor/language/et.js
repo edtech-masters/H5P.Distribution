@@ -213,6 +213,8 @@ H5PEditor.language.core = {
   contributeTranslations: 'Kui tahad lõpetada tõlge keelele :language, siis vaata lähemalt <a href=":url" target="_new">contributing translations to H5P</a>',
   unknownLibrary: 'Kahjuks ei ole valitud sisutüüp \'%lib\' sellesse süsteemi paigaldatud.',
   proceedButtonLabel: 'Edasi salvestama',
+  previewButtonLabel: 'Preview',
+  backToEditLabel: 'Back To Edit',
   enterFullscreenButtonLabel: 'Ava täisekraanis',
   exitFullscreenButtonLabel: 'Välju täisekraanist'
 };

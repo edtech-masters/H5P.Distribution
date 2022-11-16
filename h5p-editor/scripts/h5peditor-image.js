@@ -182,6 +182,21 @@ ns.widgets.image.prototype.setCopyright = function (value) {
 };
 
 
+function handleImageFileUploadEvent(that) {
+  // temp fix to avoid QA block
+  // if(window.parent.launchH5PImageUploadDialog) {
+    const data = {
+      callback: (imageFile) => {
+        that.upload(imageFile, imageFile.name);
+      }
+    };
+    const event = new CustomEvent('launchH5PImageUploadDialog', { detail: data } );
+    window.parent.dispatchEvent(event);
+    return false;
+  // }
+  //that.openFileSelector();
+}
+
 /**
  * Creates thumbnail HTML and actions.
  *
@@ -206,8 +221,7 @@ ns.widgets.image.prototype.addFile = function () {
       .children('.add')
       .click(function () {
         that.isOriginalImage = true;
-        that.openFileSelector();
-        return false;
+        handleImageFileUploadEvent(that);
       });
 
     // Remove edit image button
@@ -231,7 +245,7 @@ ns.widgets.image.prototype.addFile = function () {
     .children(':eq(0)')
     .click(function () {
       that.isOriginalImage = true;
-      that.openFileSelector();
+      handleImageFileUploadEvent(that);
       return false;
     })
     .children('img')

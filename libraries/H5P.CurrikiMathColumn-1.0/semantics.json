@@ -15,6 +15,7 @@
           "type": "library",
           "importance": "high",
           "label": "Content",
+	  "optional":"false",
           "options": [
             "H5P.GeoGebraGeometry 1.0",
             "H5P.GeoGebraGraphing 1.0",
