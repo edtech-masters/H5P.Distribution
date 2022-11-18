@@ -1,12 +1,15 @@
 H5P.BranchingQuestion = (function () {
 
-  function BranchingQuestion(parameters) {
+  function BranchingQuestion(parameters, contentId, extras) {
     var self = this;
     self.firstFocusable;
     self.lastFocusable;
     H5P.EventDispatcher.call(self);
     this.container = null;
     let answered;
+    if(extras.previousState && extras.previousState.hasOwnProperty("answered")) {
+      answered = extras.previousState.answered;
+    }
 
     /**
      * Get closest ancestor of DOM element that matches selector.
@@ -135,6 +138,7 @@ H5P.BranchingQuestion = (function () {
             if (index2 >= 0 && currentAltHasFeedback) {
               nextScreen.feedback = currentAltParams.feedback;
             }
+            nextScreen.text = currentAltParams.text;
             self.trigger('navigated', nextScreen);
           }
         };
@@ -249,7 +253,7 @@ H5P.BranchingQuestion = (function () {
       var xAPIEvent = this.createXAPIEventTemplate('answered');
       addQuestionToXAPI(xAPIEvent);
       xAPIEvent.setScoredResult(undefined, undefined, self, true);
-      xAPIEvent.data.statement.result.response = answered;
+      xAPIEvent.data.statement.result.response = answered + '';
       return {
         statement: xAPIEvent.data.statement
       };
@@ -303,6 +307,17 @@ H5P.BranchingQuestion = (function () {
       $container.append(questionContainer);
       this.container = $container[0];
     };
+
+    self.getTitle = function (){
+      return H5P.createTitle((extras.metadata && extras.metadata.title) ? extras.metadata.title : 'Branching Question');
+    };
+
+    self.getCurrentState = function () {
+      var state = {
+        answered: answered,
+      };
+      return state;
+    }
   }
 
   return BranchingQuestion;

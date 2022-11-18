@@ -211,6 +211,8 @@ H5PEditor.language.core = {
   contributeTranslations: 'Jos haluat auttaa käännöstyössä löydät lisätietoja täältä:<a href=":url" target="_new">H5P käännöksissä auttaminen</a>',
   unknownLibrary: 'Valitettavasti valittua sisältötyyppiä \'%lib\' ei ole asennettuna tähän järjestelmään. Olethan yhteydessä ylläpitoon.',
   proceedButtonLabel: 'Proceed to save',
+  previewButtonLabel: 'Preview',
+  backToEditLabel: 'Back To Edit',
   enterFullscreenButtonLabel: 'Enter fullscreen',
   exitFullscreenButtonLabel: 'Exit fullscreen'
 };

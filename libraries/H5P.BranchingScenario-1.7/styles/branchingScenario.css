@@ -147,3 +147,7 @@
 .h5p-branching-scenario .h5p-library-wrapper.h5p-next:not(.h5p-slide-in) {
   display: none;
 }
+
+.h5p-summary-table-pages {
+  border-bottom: none !important;
+}

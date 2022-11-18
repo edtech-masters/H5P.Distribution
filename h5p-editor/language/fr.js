@@ -211,6 +211,8 @@ H5PEditor.language.core = {
   contributeTranslations: 'Si vous souhaitez compléter la traduction de : language, cliquez pour en savoir plus sur la façon de <a href=":url" target="_new"> contribuer aux traductions de H5P </a>.',
   unknownLibrary: 'Malheureusement, la bibliothèque pour le type de contenu sélectionné \'%lib\' n\'est pas installée sur votre système.',
   proceedButtonLabel: 'Enregistrer',
+  previewButtonLabel: 'Preview',
+  backToEditLabel: 'Back To Edit',
   enterFullscreenButtonLabel: 'Afficher en plein écran',
   exitFullscreenButtonLabel: 'Quitter le mode plein écran'
 };

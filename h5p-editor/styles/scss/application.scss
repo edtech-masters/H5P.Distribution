@@ -1283,3 +1283,45 @@ a {
     text-decoration: underline;
   }
 }
+
+.h5peditor-preview-button {
+  cursor: pointer;
+  background: transparent;
+  color: white;
+  border: none;
+  text-transform: uppercase;
+  font-size: 0.875em;
+  font-weight: bold;
+  padding: 0.47em 0.75em;
+  margin-right: 0.4em;
+  margin-left: 0.4em;
+  border-radius: 0.25em;
+  transition: background 0.2s linear;
+
+  &[disabled] {
+    cursor: default;
+    opacity: 0.25;
+  }
+}
+
+.h5peditor-preview-button:not([disabled]):hover {
+  background: #363b42;
+}
+
+.h5peditor-preview-button.back:hover {
+  background: #0d396c;
+}
+
+.h5peditor-preview-button:before {
+  font-family: "Material Icons";
+  content: "\e41b";
+  font-size: 1.1em;
+  padding-right: 0.75em;
+  vertical-align: text-bottom;
+  font-weight: normal;
+}
+
+.h5peditor-preview-button.back:before {
+  content: "\e3c9";
+}
+

@@ -213,6 +213,8 @@ H5PEditor.language.core = {
   contributeTranslations: 'Если вы хотите завершить перевод для :language вы можете узнать о том как <a href=":url" target="_new">внести переводы в H5P</a>',
   unknownLibrary: 'К сожалению, выбранный тип контента \'%lib\' isn\ не установлен в этой системе.',
   proceedButtonLabel: 'Перейти к сохранению',
+  previewButtonLabel: 'Preview',
+  backToEditLabel: 'Back To Edit',
   enterFullscreenButtonLabel: 'Войти в полноэкранный режим',
   exitFullscreenButtonLabel: 'Покинуть полноэкранный режим'
 };

@@ -245,6 +245,8 @@ H5P.Blanks = (function ($, Question) {
         self.a11yHeader.innerHTML = self.params.a11yHeader;
         self.a11yHeader.focus();
 
+        // to enable solution mode after check
+        self.solutionMode = false;
         self.toggleButtonVisibility(STATE_CHECKING);
 
         if(typeof self.parent == "undefined") {

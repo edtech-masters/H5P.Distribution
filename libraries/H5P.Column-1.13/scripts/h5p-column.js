@@ -350,11 +350,17 @@ H5P.Column = (function (EventDispatcher) {
 
                     }
                   });
-          
-                  confirmationDialog.appendTo(parent.document.body);
-                  confirmationDialog.show();
-                  //H5P.jQuery(window.parent).scrollTop(0); 
-                  H5P.jQuery(".h5p-confirmation-dialog-popup").css("top", "80%"); 
+
+                  // if editor then show confirm only inside editor window
+                  const editor = document.querySelector('.h5peditor');
+                  if(editor) {
+                    confirmationDialog.appendTo(document.body);
+                  } else {
+                    confirmationDialog.appendTo(parent.document.body);
+                  }
+                //H5P.jQuery(window.parent).scrollTop(0);
+                H5P.jQuery(".h5p-confirmation-dialog-popup").css("top", "80%");
+                confirmationDialog.show();
               },
           },
           appendTo: wrapper,
