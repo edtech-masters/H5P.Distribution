@@ -151,3 +151,6 @@
 .h5p-summary-table-pages {
   border-bottom: none !important;
 }
+.h5p-branchingscenario-editor .h5peditor-form .tab-view-full-page{
+  display: flex !important;
+}
