@@ -154,3 +154,7 @@
 .h5p-branchingscenario-editor .h5peditor-form .tab-view-white-box{
   max-height: calc(100% - 30.55rem) !important;
 }
+.editor-overlay{
+  height: 70% !important;
+  bottom: 70% !important;
+}
