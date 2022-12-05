@@ -124,7 +124,7 @@ input[name="upload"] {
     float: left;
     margin-top: -40px;
     margin-left: -40px;
-    display: none;
+    display: none !important;
 }
 /* .doc-upload::before {
     background-color: #f7faff;
@@ -147,7 +147,7 @@ input[name="upload"] {
 }
 
 .cke_dialog_ui_input_file {
-    margin: -40px 50px 0 -35px;
+    margin: -30px 50px 0 -35px;
     height: 61px !important;
 }
 
