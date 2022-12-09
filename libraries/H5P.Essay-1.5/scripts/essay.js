@@ -1,7 +1,6 @@
 var H5P = H5P || {};
 
 H5P.Essay = function ($, Question) {
-  'use strict';
 
   // CSS Classes
   var SOLUTION_CONTAINER = 'h5p-essay-solution-container';
@@ -142,6 +141,11 @@ H5P.Essay = function ($, Question) {
       else if (type === 'H5P.Video') {
         if (media.params.sources) {
           this.setVideo(media);
+        }
+      }
+      else if (type === 'H5P.Audio') {
+        if (media.params.files) {
+          this.setAudio(media);
         }
       }
     }
