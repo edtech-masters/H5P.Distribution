@@ -124,8 +124,9 @@ input[name="upload"] {
     float: left;
     margin-top: -40px;
     margin-left: -40px;
+    display: none !important;
 }
-.doc-upload::before {
+/* .doc-upload::before {
     background-color: #f7faff;
     padding: 6px 12px;
     content: url("data:image/svg+xml,%3Csvg width='15' height='12' class='mr-2' viewBox='0 0 15 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.5 7V10.2C1.5 10.4122 1.65804 10.6157 1.93934 10.7657C2.22064 10.9157 2.60218 11 3 11H12C12.3978 11 12.7794 10.9157 13.0607 10.7657C13.342 10.6157 13.5 10.4122 13.5 10.2V7' stroke='%23084892' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E%3Cpath d='M10.1499 3.39999L7.5249 1L4.8999 3.39999' stroke='%23084892' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E%3Cpath d='M7.5 1V8.79997' stroke='%23084892' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E%3C/svg%3E") " Select file ";
@@ -133,7 +134,7 @@ input[name="upload"] {
     top: 16px;
     left: 24px;
     border-radius: 4px;
-}
+} */
 .doc-upload:after {
     position: absolute;
     bottom: 40px;
@@ -146,7 +147,8 @@ input[name="upload"] {
 }
 
 .cke_dialog_ui_input_file {
-    margin: -40px 50px 0 -35px;
+    margin: -30px 50px 0 -35px;
+    height: 61px !important;
 }
 
 .cke_dialog_close_button {
