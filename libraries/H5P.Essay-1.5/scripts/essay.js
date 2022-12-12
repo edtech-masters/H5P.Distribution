@@ -1,6 +1,7 @@
 var H5P = H5P || {};
 
 H5P.Essay = function ($, Question) {
+  'use strict';
 
   // CSS Classes
   var SOLUTION_CONTAINER = 'h5p-essay-solution-container';
@@ -143,15 +144,10 @@ H5P.Essay = function ($, Question) {
           this.setVideo(media);
         }
       }
-      else if (type === 'H5P.Audio') {
-        if (media.params.files) {
-          this.setAudio(media);
-        }
-      }
     }
 
     // Create InputField
-    this.inputField = H5P.Essay.InputField({
+    this.inputField = new H5P.Essay.InputField({
       'taskDescription': this.params.taskDescription,
       'placeholderText': this.params.placeholderText,
       'maximumLength': this.params.behaviour.maximumLength,
