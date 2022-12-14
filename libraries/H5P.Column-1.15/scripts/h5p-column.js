@@ -92,7 +92,10 @@ H5P.Column = (function (EventDispatcher) {
         var progressed = self.createXAPIEventTemplate('progressed');
         progressed.data.statement.object.definition.extensions['http://id.tincanapi.com/extension/ending-point'] = taskIndex + 1;
         self.trigger(progressed);
-
+console.log("here");
+console.log(numTasksCompleted);
+console.log(numTasks);
+console.log(tasksResultEvent);
         // Check to see if we're done
         if (numTasksCompleted === numTasks) {
           // Run this after the current event is sent
@@ -323,8 +326,10 @@ H5P.Column = (function (EventDispatcher) {
                     var rawwa = 0;
                     var maxwa = 0;
                     console.log(tasksResultEvent);
+                    console.log(instances);
                     for (var m = 0; m < tasksResultEvent.length; m++) {
                       var eventwa = tasksResultEvent[m];
+                      console.log(eventwa);
                       if(typeof eventwa != "undefined"){
                         rawwa += eventwa.getScore();
                         maxwa += eventwa.getMaxScore();
