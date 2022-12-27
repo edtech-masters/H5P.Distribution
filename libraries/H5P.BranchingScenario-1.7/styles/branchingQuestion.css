@@ -192,6 +192,7 @@
   margin-left: 0;
   display: block;
   overflow-y: auto;
+  overflow-x: hidden;
   width: 100%;
   box-sizing: border-box;
 }
