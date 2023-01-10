@@ -130,7 +130,8 @@
 .h5p-dragnbar-twitteruserfeed-button:before,
 .h5p-dragnbar-audiorecorder-button:before,
 .h5p-dragnbar-interactivevideo-button:before,
-.h5p-dragnbar-chart-button:before {
+.h5p-dragnbar-chart-button:before,
+.h5p-dragnbar-essay-button:before {
   font-family: 'H5PFontAwesome4';
   color: #494949;
   font-size: 1.1em;
@@ -241,6 +242,10 @@
 }
 .h5p-dragnbar-shape-horizontal-line-button:before {
   content: "\e91e";
+}
+
+.h5p-dragnbar-essay-button:before {
+  content: "\f044";
 }
 
 .h5p-dragnbar-li-ul {
