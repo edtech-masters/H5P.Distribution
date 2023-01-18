@@ -131,7 +131,8 @@
 .h5p-dragnbar-audiorecorder-button:before,
 .h5p-dragnbar-interactivevideo-button:before,
 .h5p-dragnbar-chart-button:before,
-.h5p-dragnbar-essay-button:before {
+.h5p-dragnbar-essay-button:before,
+.h5p-dragnbar-imagemultiplehotspotquestion-button {
   font-family: 'H5PFontAwesome4';
   color: #494949;
   font-size: 1.1em;
@@ -246,6 +247,10 @@
 
 .h5p-dragnbar-essay-button:before {
   content: "\f044";
+}
+
+.h5p-dragnbar-imagemultiplehotspotquestion-button:before {
+  content: "\f1c5";
 }
 
 .h5p-dragnbar-li-ul {
