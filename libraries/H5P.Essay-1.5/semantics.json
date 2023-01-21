@@ -354,6 +354,14 @@
             "label": "3 lines"
           },
           {
+            "value": "4",
+            "label": "4 lines"
+          },
+          {
+            "value": "5",
+            "label": "5 lines"
+          },
+          {
             "value": "10",
             "label": "10 lines"
           }

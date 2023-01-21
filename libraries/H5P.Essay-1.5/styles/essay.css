@@ -58,6 +58,7 @@
 
 .h5p-essay .h5p-essay-input-field-textfield:focus {
  /* background-color: #fff;*/
+  background-color: yellow;
 }
 
 /* Reduce bottom and top margin of children */

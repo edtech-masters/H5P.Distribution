@@ -146,13 +146,21 @@ H5P.Essay = function ($, Question) {
       }
     }
 
+    // Check whether status bar is needed, no "saved" message when subcontent
+    const statusBar = !!(
+        this.params.behaviour.minimumLength ||
+        this.params.behaviour.maximumLength ||
+        (H5PIntegration && H5PIntegration.saveFreq && this.isRoot())
+    );
+
     // Create InputField
     this.inputField = new H5P.Essay.InputField({
       'taskDescription': this.params.taskDescription,
       'placeholderText': this.params.placeholderText,
       'maximumLength': this.params.behaviour.maximumLength,
       'remainingChars': this.params.remainingChars,
-      'inputFieldSize': this.params.behaviour.inputFieldSize
+      'inputFieldSize': this.params.behaviour.inputFieldSize,
+      'statusBar': statusBar
     }, this.previousState);
 
     // Register task introduction text
