@@ -149,8 +149,7 @@ H5P.Essay = function ($, Question) {
     // Check whether status bar is needed, no "saved" message when subcontent
     const statusBar = !!(
         this.params.behaviour.minimumLength ||
-        this.params.behaviour.maximumLength ||
-        (H5PIntegration && H5PIntegration.saveFreq && this.isRoot())
+        this.params.behaviour.maximumLength
     );
 
     // Create InputField
