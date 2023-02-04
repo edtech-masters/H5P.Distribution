@@ -479,6 +479,15 @@
             "label": "Disabled"
           }
         ]
+      },
+      {
+        "name": "enableSubmitAnswerFeedback",
+        "label": "Enable submit answer feedback",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will see the feedback that you provided after submission",
+        "default": false,
+        "optional": true
       }
     ]
   },
@@ -566,6 +575,15 @@
     "importance": "low",
     "common": true,
     "default": "Navigated to newly included sample solution after textarea."
+  },
+  {
+    "name": "submitAnswerFeedback",
+    "type": "text",
+    "label": "Submit answers feedback",
+    "description": "Submit answer feedback text",
+    "importance": "low",
+    "common": true,
+    "default": "Your answer has been submitted!"
   },
   {
     "name": "currikisettings",

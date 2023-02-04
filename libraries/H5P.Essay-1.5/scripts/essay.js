@@ -41,7 +41,8 @@ H5P.Essay = function ($, Question) {
           inputFieldSize: 10,
           enableRetry: true,
           ignoreScoring: false,
-          pointsHost: 1
+          pointsHost: 1,
+          enableSubmitAnswerFeedback: false
         },
         checkAnswer: 'Check',
         tryAgain: 'Retry',
@@ -54,6 +55,7 @@ H5P.Essay = function ($, Question) {
         messageSave: 'saved',
         ariaYourResult: 'You got @score out of @total points',
         ariaNavigatedToSolution: 'Navigated to newly included sample solution after textarea.',
+        submitAnswerFeedback: 'Your answer has been submitted!',
         currikisettings: {
           disableSubmitButton: false,
           currikil10n: {
@@ -237,6 +239,10 @@ H5P.Essay = function ($, Question) {
           that.showButton('submit-answer');
       }
       that.hideButton('check-answer');
+      if(!that.isRoot() && that.params.behaviour.enableSubmitAnswerFeedback) {
+        var $submit_message = `<div class="submit-answer-feedback">${that.params.submitAnswerFeedback}</div>`;
+        H5P.jQuery('.h5p-question-content').append($submit_message);
+      }
     }, true, {}, {});
 
     
