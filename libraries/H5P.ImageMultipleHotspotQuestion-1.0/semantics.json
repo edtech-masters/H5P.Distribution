@@ -150,5 +150,58 @@
         ]
       }
     ]
+  },
+  {
+    "name": "behaviour",
+    "type": "group",
+    "label": "Behavioural settings",
+    "importance": "low",
+    "description": "These options will let you control how the task behaves.",
+    "fields": [
+      {
+        "name": "enableSubmitAnswer",
+        "label": "Enable \"Submit\" button",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners can submit the task.",
+        "default": false,
+        "optional": true
+      },
+      {
+        "name": "ignoreScoring",
+        "label": "Ignore scoring",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, score will be ignored in the feedback",
+        "default": false,
+        "optional": true
+      },
+      {
+        "name": "enableSubmitAnswerFeedback",
+        "label": "Enable submit answer feedback",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will see the feedback that you provided after submission",
+        "default": false,
+        "optional": true
+      }
+    ]
+  },
+  {
+    "name": "submitAnswer",
+    "type": "text",
+    "label": "Text for \"Submit\" button",
+    "importance": "low",
+    "default": "Submit",
+    "common": true
+  },
+  {
+    "name": "submitAnswerFeedback",
+    "type": "text",
+    "label": "Submit answers feedback",
+    "description": "Submit answer feedback text",
+    "importance": "low",
+    "common": true,
+    "default": "Your answer has been submitted!"
   }
 ]
