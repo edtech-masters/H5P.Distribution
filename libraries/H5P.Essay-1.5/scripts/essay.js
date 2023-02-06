@@ -42,7 +42,8 @@ H5P.Essay = function ($, Question) {
           enableRetry: true,
           ignoreScoring: false,
           pointsHost: 1,
-          enableSubmitAnswerFeedback: false
+          enableSubmitAnswerFeedback: false,
+          submissionButtonsAlignment: 'left'
         },
         checkAnswer: 'Check',
         tryAgain: 'Retry',
@@ -118,6 +119,25 @@ H5P.Essay = function ($, Question) {
       this.params.behaviour.percentagePassing * scoreMax / 100 || 0);
 
     this.solution = this.buildSolution();
+
+    /**
+     * Overrides the attach method of the superclass (H5P.Question) and calls it
+     * at the same time. (equivalent to super.attach($container)).
+     * This is necessary, as Ractive needs to be initialized with an existing DOM
+     * element. DOM elements are created in H5P.Question.attach, so initializing
+     * Ractive in registerDomElements doesn't work.
+     */
+    this.attach = ((original) => {
+      return ($container) => {
+        original($container);
+        if(this.params.behaviour.submissionButtonsAlignment === 'right') {
+          const h5pQuestionButtons = $container.find('.h5p-question-buttons');
+          if(h5pQuestionButtons) {
+            h5pQuestionButtons.addClass('right-align');
+          }
+        }
+      }
+    })(this.attach);
   }
 
   // Extends Question

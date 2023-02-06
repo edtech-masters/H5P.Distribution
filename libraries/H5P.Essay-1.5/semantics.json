@@ -488,6 +488,25 @@
         "description": "If checked, learners will see the feedback that you provided after submission",
         "default": false,
         "optional": true
+      },
+      {
+        "name": "submissionButtonsAlignment",
+        "type": "select",
+        "label": "Submission buttons alignment",
+        "importance": "low",
+        "description": "This option determines alignment for submission buttons",
+        "optional": true,
+        "default": "left",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
       }
     ]
   },
