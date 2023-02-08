@@ -130,6 +130,7 @@ H5P.Essay = function ($, Question) {
     this.attach = ((original) => {
       return ($container) => {
         original($container);
+        this.wrapper = $container;
         if(this.params.behaviour.submissionButtonsAlignment === 'right') {
           const h5pQuestionButtons = $container.find('.h5p-question-buttons');
           if(h5pQuestionButtons) {
@@ -261,7 +262,7 @@ H5P.Essay = function ($, Question) {
       that.hideButton('check-answer');
       if(!that.isRoot() && that.params.behaviour.enableSubmitAnswerFeedback) {
         var $submit_message = `<div class="submit-answer-feedback">${that.params.submitAnswerFeedback}</div>`;
-        H5P.jQuery('.h5p-question-content').append($submit_message);
+        that.wrapper.find('.h5p-question-content').append($submit_message);
       }
     }, true, {}, {});
 
@@ -269,7 +270,7 @@ H5P.Essay = function ($, Question) {
 
     // Retry button
     that.addButton('try-again', that.params.tryAgain, function () {
-      H5P.jQuery('.submit-answer-feedback').remove();
+      that.wrapper.find('.submit-answer-feedback').remove();
       that.resetTask();
     }, false, {}, {});
 
