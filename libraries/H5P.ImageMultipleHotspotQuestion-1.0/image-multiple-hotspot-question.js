@@ -266,11 +266,8 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
     }
   };
 
-  ImageMultipleHotspotQuestion.prototype.highlightHotSpot = function(hotspot) {
-    hotspot.css({
-      'border': '2px dashed rgba(0,191,255, 1)',
-      'background-color': 'rgb(211,211,211, 75%)'
-    });
+  ImageMultipleHotspotQuestion.prototype.highlightHotSpot = function (hotspot) {
+    hotspot.toggleClass('highlight-hotspot');
   };
 
   /**
