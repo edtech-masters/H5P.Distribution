@@ -110,3 +110,19 @@
   width: 0;
   overflow: hidden;
 }
+
+.h5p-blanks .h5p-question-content .submit-answer-feedback {
+  color: black;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+}
+
+.h5p-blanks .h5p-question-buttons.right-align {
+  width: 100% !important;
+  text-align: right !important;
+}
+
+.h5p-blanks .h5p-question-buttons.right-align .h5p-joubelui-button,
+.h5p-blanks .h5p-question-buttons.right-align .h5p-joubelui-button:first-child:last-child {
+  margin: 0 0 0 0.5em !important;
+}

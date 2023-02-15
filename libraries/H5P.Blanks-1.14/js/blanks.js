@@ -84,7 +84,11 @@ H5P.Blanks = (function ($, Question) {
         caseSensitive: true,
         showSolutionsRequiresInput: true,
         autoCheck: false,
-        separateLines: false
+        separateLines: false,
+        submissionButtonsAlignment: 'left',
+        enableSubmitAnswerFeedback: false,
+        ignoreScoring: false,
+        ignoreAnswerEvaluation: false
       },
       currikisettings: {
         disableSubmitButton: false,
@@ -97,6 +101,7 @@ H5P.Blanks = (function ($, Question) {
       a11yRetry: 'Retry the task. Reset all responses and start the task over again.',
       a11yHeader: 'Checking mode',
       submitAnswer: 'Submit',
+      submitAnswerFeedback: 'Your answer has been submitted!',
     }, params);
 
     // Delete empty questions
@@ -203,6 +208,27 @@ H5P.Blanks = (function ($, Question) {
       };
     })(this.setActivityStarted);
 
+
+    /**
+     * Overrides the attach method of the superclass (H5P.Question) and calls it
+     * at the same time. (equivalent to super.attach($container)).
+     * This is necessary, as Ractive needs to be initialized with an existing DOM
+     * element. DOM elements are created in H5P.Question.attach, so initializing
+     * Ractive in registerDomElements doesn't work.
+     */
+    this.attach = ((original) => {
+      return ($container) => {
+        original($container);
+        this.wrapper = $container;
+        if(this.params.behaviour.submissionButtonsAlignment === 'right') {
+          const h5pQuestionButtons = $container.find('.h5p-question-buttons');
+          if(h5pQuestionButtons) {
+            h5pQuestionButtons.addClass('right-align');
+          }
+        }
+      }
+    })(this.attach);
+
   }
 
   var isDynamicTasks = [
@@ -257,6 +283,11 @@ H5P.Blanks = (function ($, Question) {
         self.showEvaluation();
 
         self.triggerAnswered();
+
+        if(!self.isRoot() && self.params.behaviour.enableSubmitAnswerFeedback) {
+          var $submit_message = `<div class="submit-answer-feedback">${self.params.submitAnswerFeedback}</div>`;
+          self.wrapper.find('.h5p-question-content').append($submit_message);
+        }
 
       }, true, {
         'aria-label': self.params.a11yCheck,
@@ -940,6 +971,9 @@ H5P.Blanks = (function ($, Question) {
    * Show evaluation widget, i.e: 'You got x of y blanks correct'
    */
   Blanks.prototype.showEvaluation = function () {
+    if (this.params.behaviour.ignoreScoring) {
+      return;
+    }
     var maxScore = this.getMaxScore();
     var score = this.getScore();
     var scoreText = H5P.Question.determineOverallFeedback(this.params.overallFeedback, score / maxScore).replace('@score', score).replace('@total', maxScore);
