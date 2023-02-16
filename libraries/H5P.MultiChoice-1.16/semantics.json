@@ -357,6 +357,15 @@
         "default": "Retry the task. Reset all responses and start the task over again.",
         "importance": "low",
         "common": true
+      },
+      {
+        "name": "submitAnswerFeedback",
+        "type": "text",
+        "label": "Submit answers feedback",
+        "description": "Submit answer feedback text",
+        "importance": "low",
+        "common": true,
+        "default": "Your answer has been submitted!"
       }
     ]
   },
@@ -478,6 +487,52 @@
         "description": "Show points earned for each answer. This will not be an option in 'Single answer' mode or if 'Give one point for the whole task' option is enabled.",
         "importance": "low",
         "default": true
+      },
+      {
+        "name": "submissionButtonsAlignment",
+        "type": "select",
+        "label": "Submission buttons alignment",
+        "importance": "low",
+        "description": "This option determines alignment for submission buttons",
+        "optional": true,
+        "default": "left",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "name": "enableSubmitAnswerFeedback",
+        "label": "Enable submit answer feedback",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will see the feedback that you provided after submission",
+        "default": false,
+        "optional": true
+      },
+      {
+        "name": "ignoreScoring",
+        "label": "Ignore scoring",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will only see the feedback that you provided for the keywords, but no score.",
+        "default": false,
+        "optional": true
+      },
+      {
+        "name": "ignoreAnswerEvaluation",
+        "label": "Ignore answer evaluation",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will not able see the answer is correct or not indication after submission.",
+        "default": false,
+        "optional": true
       }
     ]
   },

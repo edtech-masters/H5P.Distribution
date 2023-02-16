@@ -105,6 +105,7 @@ H5P.MultiChoice = function (options, contentId, contentData) {
       a11yCheck: 'Check the answers. The responses will be marked as correct, incorrect, or unanswered.',
       a11yShowSolution: 'Show the solution. The task will be marked with its correct solution.',
       a11yRetry: 'Retry the task. Reset all responses and start the task over again.',
+      submitAnswerFeedback: 'Your answer has been submitted!'
     },
     behaviour: {
       enableRetry: true,
@@ -116,7 +117,11 @@ H5P.MultiChoice = function (options, contentId, contentData) {
       showSolutionsRequiresInput: true,
       autoCheck: false,
       passPercentage: 100,
-      showScorePoints: true
+      showScorePoints: true,
+      submissionButtonsAlignment: 'left',
+      enableSubmitAnswerFeedback: false,
+      ignoreScoring: false,
+      ignoreAnswerEvaluation: false
     }
   };
   var template = new EJS({text: texttemplate});
@@ -579,6 +584,7 @@ H5P.MultiChoice = function (options, contentId, contentData) {
     self.hideButton('show-solution');
     enableInput();
     $myDom.find('.h5p-feedback-available').remove();
+    self.wrapper.find('.submit-answer-feedback').remove();
     // for xapi duration
     if (this.activityStartTime) {
       this.activityStartTime = Date.now();
@@ -628,6 +634,13 @@ H5P.MultiChoice = function (options, contentId, contentData) {
     addQuestionToXAPI(xAPIEvent);
     addResponseToXAPI(xAPIEvent);
     self.trigger(xAPIEvent);
+
+
+    if(!self.isRoot() && params.behaviour.enableSubmitAnswerFeedback) {
+      var $submit_message = `<div class="submit-answer-feedback">${params.UI.submitAnswerFeedback}</div>`;
+      self.wrapper.find('.h5p-question-content').append($submit_message);
+    }
+
   };
 
   /**
@@ -662,7 +675,7 @@ H5P.MultiChoice = function (options, contentId, contentData) {
 
     // Show solution button
     self.addButton('show-solution', params.UI.showSolutionButton, function () {
-
+      self.wrapper.find('.submit-answer-feedback').remove();
       if (params.behaviour.showSolutionsRequiresInput && !isAnswerSelected()) {
         // Require answer before solution can be viewed
         self.updateFeedbackContent(params.UI.noInput);
@@ -763,52 +776,60 @@ H5P.MultiChoice = function (options, contentId, contentData) {
    * @param {boolean} [skipFeedback] Skip showing feedback if true
    */
   this.showCheckSolution = function (skipFeedback) {
-    var scorePoints;
-    if (!(params.behaviour.singleAnswer || params.behaviour.singlePoint || !params.behaviour.showScorePoints)) {
-      scorePoints = new H5P.Question.ScorePoints();
+    if (!params.behaviour.ignoreAnswerEvaluation) {
+      var scorePoints;
+      if (!(params.behaviour.singleAnswer || params.behaviour.singlePoint
+          || !params.behaviour.showScorePoints)) {
+        scorePoints = new H5P.Question.ScorePoints();
+      }
+
+      $myDom.find('.h5p-answer').each(function (i, e) {
+        var $e = $(e);
+        var a = params.answers[i];
+        var chosen = ($e.attr('aria-checked') === 'true');
+        if (chosen) {
+          if (a.correct) {
+            // May already have been applied by instant feedback
+            if (!$e.hasClass('h5p-correct')) {
+              $e.addClass('h5p-correct').append($('<span/>', {
+                'class': 'h5p-answer-icon',
+                html: params.UI.correctAnswer + '.'
+              }));
+            }
+          } else {
+            if (!$e.hasClass('h5p-wrong')) {
+              $e.addClass('h5p-wrong').append($('<span/>', {
+                'class': 'h5p-answer-icon',
+                html: params.UI.wrongAnswer + '.'
+              }));
+            }
+          }
+
+          if (scorePoints) {
+            var alternativeContainer = $e[0].querySelector(
+                '.h5p-alternative-container');
+
+            if (!params.behaviour.autoCheck
+                || alternativeContainer.querySelector(
+                    '.h5p-question-plus-one, .h5p-question-minus-one')
+                === null) {
+              alternativeContainer.appendChild(
+                  scorePoints.getElement(a.correct));
+            }
+          }
+        }
+
+        if (!skipFeedback) {
+          if (chosen && a.tipsAndFeedback.chosenFeedback !== undefined
+              && a.tipsAndFeedback.chosenFeedback !== '') {
+            insertFeedback($e, a.tipsAndFeedback.chosenFeedback);
+          } else if (!chosen && a.tipsAndFeedback.notChosenFeedback
+              !== undefined && a.tipsAndFeedback.notChosenFeedback !== '') {
+            insertFeedback($e, a.tipsAndFeedback.notChosenFeedback);
+          }
+        }
+      });
     }
-
-    $myDom.find('.h5p-answer').each(function (i, e) {
-      var $e = $(e);
-      var a = params.answers[i];
-      var chosen = ($e.attr('aria-checked') === 'true');
-      if (chosen) {
-        if (a.correct) {
-          // May already have been applied by instant feedback
-          if (!$e.hasClass('h5p-correct')) {
-            $e.addClass('h5p-correct').append($('<span/>', {
-              'class': 'h5p-answer-icon',
-              html: params.UI.correctAnswer + '.'
-            }));
-          }
-        }
-        else {
-          if (!$e.hasClass('h5p-wrong')) {
-            $e.addClass('h5p-wrong').append($('<span/>', {
-              'class': 'h5p-answer-icon',
-              html: params.UI.wrongAnswer + '.'
-            }));
-          }
-        }
-
-        if (scorePoints) {
-          var alternativeContainer = $e[0].querySelector('.h5p-alternative-container');
-
-          if (!params.behaviour.autoCheck || alternativeContainer.querySelector('.h5p-question-plus-one, .h5p-question-minus-one') === null) {
-            alternativeContainer.appendChild(scorePoints.getElement(a.correct));
-          }
-        }
-      }
-
-      if (!skipFeedback) {
-        if (chosen && a.tipsAndFeedback.chosenFeedback !== undefined && a.tipsAndFeedback.chosenFeedback !== '') {
-          insertFeedback($e, a.tipsAndFeedback.chosenFeedback);
-        }
-        else if (!chosen && a.tipsAndFeedback.notChosenFeedback !== undefined && a.tipsAndFeedback.notChosenFeedback !== '') {
-          insertFeedback($e, a.tipsAndFeedback.notChosenFeedback);
-        }
-      }
-    });
 
     // Determine feedback
     var max = self.getMaxScore();
@@ -823,8 +844,11 @@ H5P.MultiChoice = function (options, contentId, contentData) {
     }
 
     // Show feedback
-    if (!skipFeedback) {
-      this.setFeedback(getFeedbackText(score, max), score, max, params.UI.scoreBarLabel);
+    if (!params.behaviour.ignoreScoring) {
+      if (!skipFeedback) {
+        this.setFeedback(getFeedbackText(score, max), score, max,
+            params.UI.scoreBarLabel);
+      }
     }
 
     self.trigger('resize');
@@ -1111,6 +1135,26 @@ H5P.MultiChoice = function (options, contentId, contentData) {
   this.getTitle = function () {
     return H5P.createTitle((this.contentData && this.contentData.metadata && this.contentData.metadata.title) ? this.contentData.metadata.title : 'Multiple Choice');
   };
+
+  /**
+   * Overrides the attach method of the superclass (H5P.Question) and calls it
+   * at the same time. (equivalent to super.attach($container)).
+   * This is necessary, as Ractive needs to be initialized with an existing DOM
+   * element. DOM elements are created in H5P.Question.attach, so initializing
+   * Ractive in registerDomElements doesn't work.
+   */
+  this.attach = ((original) => {
+    return ($container) => {
+      original($container);
+      this.wrapper = $container;
+      if(params.behaviour.submissionButtonsAlignment === 'right') {
+        const h5pQuestionButtons = $container.find('.h5p-question-buttons');
+        if(h5pQuestionButtons) {
+          h5pQuestionButtons.addClass('right-align');
+        }
+      }
+    }
+  })(this.attach);
 };
 
 H5P.MultiChoice.prototype = Object.create(H5P.Question.prototype);
