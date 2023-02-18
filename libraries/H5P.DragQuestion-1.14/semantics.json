@@ -472,6 +472,52 @@
         "importance": "low",
         "description": "Uncheck this option if you do not want this title to be displayed. The title will only be displayed in summaries, statistics etc.",
         "default": true
+      },
+      {
+        "name": "submissionButtonsAlignment",
+        "type": "select",
+        "label": "Submission buttons alignment",
+        "importance": "low",
+        "description": "This option determines alignment for submission buttons",
+        "optional": true,
+        "default": "left",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ]
+      },
+      {
+        "name": "enableSubmitAnswerFeedback",
+        "label": "Enable submit answer feedback",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will see the feedback that you provided after submission",
+        "default": false,
+        "optional": true
+      },
+      {
+        "name": "ignoreScoring",
+        "label": "Ignore scoring",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will only see the feedback that you provided for the keywords, but no score.",
+        "default": false,
+        "optional": true
+      },
+      {
+        "name": "ignoreAnswerEvaluation",
+        "label": "Ignore answer evaluation",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will not able see the answer is correct or not indication after submission.",
+        "default": false,
+        "optional": true
       }
     ]
   },
@@ -598,5 +644,15 @@
     "default": "Retry the task. Reset all responses and start the task over again.",
     "importance": "low",
     "common": true
+  },
+  {
+    "name": "submitAnswerFeedback",
+    "type": "text",
+    "label": "Submit answers feedback",
+    "description": "Submit answer feedback text",
+    "importance": "low",
+    "common": true,
+    "default": "Your answer has been submitted!"
   }
+
 ]

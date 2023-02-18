@@ -68,12 +68,17 @@ function C(options, contentId, contentData) {
       autoAlignSpacing: 2,
       showScorePoints: true,
       showTitle: false,
-      showSubmitAnswersButton: true
+      showSubmitAnswersButton: true,
+      submissionButtonsAlignment: 'left',
+      enableSubmitAnswerFeedback: false,
+      ignoreScoring: false,
+      ignoreAnswerEvaluation: false
     },
     a11yCheck: 'Check the answers. The responses will be marked as correct, incorrect, or unanswered.',
     a11ySubmit: 'Submit the answers.',
     a11yRetry: 'Retry the task. Reset all responses and start the task over again.',
     submit: 'Submit',
+    submitAnswerFeedback: 'Your answer has been submitted!'
   }, options);
 
   // If single point is enabled, it makes no sense displaying
@@ -273,6 +278,26 @@ function C(options, contentId, contentData) {
       self.trigger('resize');
     }
   });
+
+  /**
+   * Overrides the attach method of the superclass (H5P.Question) and calls it
+   * at the same time. (equivalent to super.attach($container)).
+   * This is necessary, as Ractive needs to be initialized with an existing DOM
+   * element. DOM elements are created in H5P.Question.attach, so initializing
+   * Ractive in registerDomElements doesn't work.
+   */
+  this.attach = ((original) => {
+    return ($container) => {
+      original($container);
+      self.wrapper = $container;
+      if(self.options.behaviour.submissionButtonsAlignment === 'right') {
+        const h5pQuestionButtons = $container.find('.h5p-question-buttons');
+        if(h5pQuestionButtons) {
+          h5pQuestionButtons.addClass('right-align');
+        }
+      }
+    };
+  })(this.attach);
 }
 
 C.prototype = Object.create(H5P.Question.prototype);
@@ -614,6 +639,13 @@ C.prototype.addCheckButton = function () {
     var $nextFocus = that.$introduction ? that.$introduction : that.$container.children().first();
     $nextFocus.focus();
 
+
+    if(!that.isRoot() && that.options.behaviour.enableSubmitAnswerFeedback) {
+      var $submit_message = `<div class="submit-answer-feedback">${that.options.submitAnswerFeedback}</div>`;
+      that.wrapper.find('.h5p-question-content').append($submit_message);
+    }
+
+
   }, true, {
     'aria-label': this.options.a11yCheck,
   }, {
@@ -860,7 +892,8 @@ C.prototype.showAllSolutions = function (skipVisuals) {
     }
 
     // Find out where we are.
-    this.points += draggable.results(skipVisuals, this.correctDZs[i], scorePoints);
+    const toSkipVisuals = skipVisuals || this.options.behaviour.ignoreAnswerEvaluation;
+    this.points += draggable.results(toSkipVisuals, this.correctDZs[i], scorePoints);
     this.rawPoints += draggable.rawPoints;
   }
 
@@ -894,6 +927,7 @@ C.prototype.showAllSolutions = function (skipVisuals) {
  * @public
  */
 C.prototype.showSolutions = function () {
+  this.wrapper.find('.submit-answer-feedback').remove();
   this.showAllSolutions();
   this.showScore();
   //Hide solution button:
@@ -934,6 +968,7 @@ C.prototype.resetTask = function () {
   this.setExplanation();
   /* XAPI restart the activityStartTime */
   this.activityStartTime = Date.now();
+  this.wrapper.find('.submit-answer-feedback').remove();
 };
 
 /**
@@ -1003,6 +1038,9 @@ C.prototype.getAnswerGiven = function () {
  * Shows the score to the user when the score button is pressed.
  */
 C.prototype.showScore = function () {
+  if (this.options.behaviour.ignoreScoring) {
+    return;
+  }
   var maxScore = this.calculateMaxScore();
   if (this.options.behaviour.singlePoint) {
     maxScore = 1;

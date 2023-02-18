@@ -287,3 +287,19 @@ html.h5p-iframe .h5p-container.h5p-dragquestion.h5p-semi-fullscreen {
   top: -0.15em;
   right: -0.15em;
 }
+
+.h5p-dragquestion .h5p-question-content .submit-answer-feedback {
+  color: black;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+}
+
+.h5p-dragquestion .h5p-question-buttons.right-align {
+  width: 100% !important;
+  text-align: right !important;
+}
+
+.h5p-dragquestion .h5p-question-buttons.right-align .h5p-joubelui-button,
+.h5p-dragquestion .h5p-question-buttons.right-align .h5p-joubelui-button:first-child:last-child {
+  margin: 0 0 0 0.5em !important;
+}
