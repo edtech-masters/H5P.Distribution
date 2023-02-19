@@ -177,6 +177,10 @@ H5P.init = function (target) {
         }
       }
 
+      // override display options from
+      if (instance.getDisplayOptions !== undefined && typeof instance.getDisplayOptions === 'function') {
+        displayOptions = H5P.jQuery.extend({}, displayOptions, instance.getDisplayOptions());
+      }
       // Create action bar
       var actionBar = new H5P.ActionBar(displayOptions);
       var $actions = actionBar.getDOMElement();
