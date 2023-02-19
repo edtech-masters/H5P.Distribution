@@ -767,6 +767,20 @@
         "default": false
       },
       {
+        "name": "enableEmbedOption",
+        "type": "boolean",
+        "label": "Enable embed icon",
+        "importance": "low",
+        "default": false
+      },
+      {
+        "name": "enableExportOption",
+        "type": "boolean",
+        "label": "Enable Export icon",
+        "importance": "low",
+        "default": false
+      },
+      {
         "name": "social",
         "type": "group",
         "label": "Social Settings",
