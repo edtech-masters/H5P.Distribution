@@ -177,7 +177,7 @@ H5P.init = function (target) {
         }
       }
 
-      // override display options from
+      // override display options from instance settings
       if (instance.getDisplayOptions !== undefined && typeof instance.getDisplayOptions === 'function') {
         displayOptions = H5P.jQuery.extend({}, displayOptions, instance.getDisplayOptions());
       }
