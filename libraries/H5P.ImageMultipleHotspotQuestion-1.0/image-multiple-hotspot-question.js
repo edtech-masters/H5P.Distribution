@@ -28,7 +28,8 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
         enableSubmitAnswer: false,
         ignoreScoring: false,
         enableRetry: true,
-        enableSubmitAnswerFeedback: false
+        enableSubmitAnswerFeedback: false,
+        submissionButtonsAlignment: 'left',
       },
       submitAnswerFeedback: 'Your answer has been submitted!',
       submitAnswer: 'Submit'
@@ -111,6 +112,26 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
 
     // Register resize listener with h5p
     this.on('resize', this.resize);
+
+    /**
+     * Overrides the attach method of the superclass (H5P.Question) and calls it
+     * at the same time. (equivalent to super.attach($container)).
+     * This is necessary, as Ractive needs to be initialized with an existing DOM
+     * element. DOM elements are created in H5P.Question.attach, so initializing
+     * Ractive in registerDomElements doesn't work.
+     */
+    this.attach = ((original) => {
+      return ($container) => {
+        original($container);
+        this.wrapper = $container;
+        if(this.params.behaviour.submissionButtonsAlignment === 'right') {
+          const h5pQuestionButtons = $container.find('.h5p-question-buttons');
+          if(h5pQuestionButtons) {
+            h5pQuestionButtons.addClass('right-align');
+          }
+        }
+      }
+    })(this.attach);
   }
 
 

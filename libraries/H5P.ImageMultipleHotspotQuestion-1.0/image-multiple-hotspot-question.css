@@ -174,3 +174,13 @@
   border: 2px dashed rgba(0, 191, 255, 1);
   background-color: rgba(211, 211, 211, 0.75) !important;
 }
+
+.h5p-image-hotspot-question .h5p-question-buttons.right-align {
+  width: 100% !important;
+  text-align: right !important;
+}
+
+.h5p-image-hotspot-question .h5p-question-buttons.right-align .h5p-joubelui-button,
+.h5p-image-hotspot-question .h5p-question-buttons.right-align .h5p-joubelui-button:first-child:last-child {
+  margin: 0 0 0 0.5em !important;
+}
