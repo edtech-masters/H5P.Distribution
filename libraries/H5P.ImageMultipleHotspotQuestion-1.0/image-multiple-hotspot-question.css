@@ -175,10 +175,16 @@
   background-color: rgba(211, 211, 211, 0.75) !important;
 }
 
-.h5p-image-hotspot-question .h5p-question-buttons.right-align {
+.h5p-element-inner.h5p-image-hotspot-question .h5p-question-buttons.right-align {
   width: 100% !important;
   text-align: right !important;
 }
+
+.h5p-button-element.h5p-image-hotspot-question .h5p-question-buttons.right-align {
+  width: calc(100% - 2em) !important;
+  text-align: right !important;
+}
+
 
 .h5p-image-hotspot-question .h5p-question-buttons.right-align .h5p-joubelui-button,
 .h5p-image-hotspot-question .h5p-question-buttons.right-align .h5p-joubelui-button:first-child:last-child {

@@ -103,11 +103,15 @@
   font-family: Arial, sans-serif;
 }
 
-.h5p-essay .h5p-question-buttons.right-align {
+.h5p-element-inner.h5p-essay .h5p-question-buttons.right-align {
   width: 100% !important;
   text-align: right !important;
 }
 
+.h5p-button-element.h5p-essay .h5p-question-buttons.right-align {
+  width: calc(100% - 2em) !important;
+  text-align: right !important;
+}
 
 .h5p-essay .h5p-question-buttons.right-align .h5p-joubelui-button,
 .h5p-essay .h5p-question-buttons.right-align .h5p-joubelui-button:first-child:last-child {

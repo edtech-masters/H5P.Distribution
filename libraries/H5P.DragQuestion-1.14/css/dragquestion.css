@@ -294,8 +294,13 @@ html.h5p-iframe .h5p-container.h5p-dragquestion.h5p-semi-fullscreen {
   font-family: Arial, sans-serif;
 }
 
-.h5p-dragquestion .h5p-question-buttons.right-align {
+.h5p-element-inner.h5p-dragquestion .h5p-question-buttons.right-align {
   width: 100% !important;
+  text-align: right !important;
+}
+
+.h5p-button-element.h5p-dragquestion .h5p-question-buttons.right-align {
+  width: calc(100% - 2em) !important;
   text-align: right !important;
 }
 
