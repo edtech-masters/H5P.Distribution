@@ -409,7 +409,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
 
     this.addButton('retry-button', 'Retry', function () {
       self.resetTask();
-      H5P.jQuery('.submit-answer-feedback').remove();
+      self.wrapper.find('.h5p-question-content').remove();
     }, false);
   };
 
@@ -423,7 +423,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
       self.hideButton('submit-answer');
       if(self.params.behaviour.enableSubmitAnswerFeedback) {
         var $submit_message = `<div class="submit-answer-feedback">${self.params.submitAnswerFeedback}</div>`;
-        H5P.jQuery('.h5p-question-content').append($submit_message);
+        self.wrapper.find('.h5p-question-content').append($submit_message);
       }
     }, self.params.behaviour.enableSubmitAnswer);
   };
