@@ -30,6 +30,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
         enableRetry: true,
         enableSubmitAnswerFeedback: false,
         submissionButtonsAlignment: 'left',
+        answerType: 'multi'
       },
       submitAnswerFeedback: 'Your answer has been submitted!',
       submitAnswer: 'Submit'
@@ -288,6 +289,16 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
   };
 
   ImageMultipleHotspotQuestion.prototype.highlightHotSpot = function (hotspot) {
+    if (this.params.behaviour.answerType === 'single') {
+      const hotspots = this.wrapper.find('.image-hotspot ');
+      if (hotspots) {
+        hotspots.each(function () {
+          if ($(this).hasClass("highlight-hotspot")) {
+            $(this).toggleClass('highlight-hotspot');
+          }
+        });
+      }
+    }
     hotspot.toggleClass('highlight-hotspot');
   };
 

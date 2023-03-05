@@ -203,6 +203,24 @@
             "label": "Right"
           }
         ]
+      },
+      {
+        "name": "answerType",
+        "type": "select",
+        "label": "Answer Type",
+        "importance": "low",
+        "description": "Select the answer type of the question.",
+        "default": "multi",
+        "options": [
+          {
+            "value": "multi",
+            "label": "Multiple"
+          },
+          {
+            "value": "single",
+            "label": "Single"
+          }
+        ]
       }
     ]
   },
