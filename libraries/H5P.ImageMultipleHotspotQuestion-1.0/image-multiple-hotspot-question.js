@@ -595,5 +595,9 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
     });
   };
 
+  ImageMultipleHotspotQuestion.prototype.getTitle = function () {
+    return H5P.createTitle((this.contentData.hasOwnProperty("metadata") && this.contentData.metadata.hasOwnProperty("title")) ? this.contentData.metadata.title : 'Find Multiple Hotspots');
+  };
+
   return ImageMultipleHotspotQuestion;
 }(H5P.jQuery, H5P.Question));
