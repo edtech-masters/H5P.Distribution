@@ -28,6 +28,8 @@ H5P.Essay = function ($, Question) {
     // Inheritance
     Question.call(this, 'essay');
 
+    this.contentData = contentData;
+
     // Sanitize defaults
     this.params = this.extend(
       {
@@ -961,6 +963,11 @@ H5P.Essay = function ($, Question) {
    * Required to be added to xAPI object description for H5P reporting
    */
   Essay.FILL_IN_PLACEHOLDER = '__________';
+
+
+  Essay.prototype.getTitle = function () {
+    return H5P.createTitle((this.contentData.hasOwnProperty("metadata") && this.contentData.metadata.hasOwnProperty("title")) ? this.contentData.metadata.title : 'Essay');
+  };
 
   return Essay;
 }(H5P.jQuery, H5P.Question);
