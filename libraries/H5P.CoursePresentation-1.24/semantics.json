@@ -76,7 +76,8 @@
                       "H5P.TwitterUserFeed 1.0",
                       "H5P.AudioRecorder 1.0",
                       "H5P.Essay 1.5",
-                      "H5P.ImageMultipleHotspotQuestion 1.0"
+                      "H5P.ImageMultipleHotspotQuestion 1.0",
+                      "H5P.MemoryGame 1.3"
                     ],
                     "optional": true
                   },

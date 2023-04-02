@@ -186,6 +186,11 @@
       "machineName": "H5P.ImageMultipleHotspotQuestion",
       "majorVersion": 1,
       "minorVersion": 0
+    },
+    {
+      "machineName": "H5P.MemoryGame",
+      "majorVersion": 1,
+      "minorVersion": 3
     }
   ]
 }

@@ -31,6 +31,7 @@ H5P.MemoryGame = (function (EventDispatcher, $) {
 
     // Add defaults
     parameters = $.extend(true, {
+      cards: [{}, {}],
       l10n: {
         cardTurns: 'Card turns',
         timeSpent: 'Time spent',
@@ -439,8 +440,13 @@ H5P.MemoryGame = (function (EventDispatcher, $) {
      * @param {H5P.jQuery} $container
      */
     self.attach = function ($container) {
+      if(cards.length === 0) {
+        return;
+      }
       // trigger xAPI event 'attempted'
-      triggerXAPIAttempted(self, contentData);
+      if (self.isRoot()) {
+        triggerXAPIAttempted(self, contentData);
+      }
       // TODO: Only create on first attach!
       $wrapper = $container.addClass('h5p-memory-game').html('');
       if (invertShades === -1) {
@@ -506,6 +512,9 @@ H5P.MemoryGame = (function (EventDispatcher, $) {
      */
     var scaleGameSize = function () {
 
+      if(!$wrapper) {
+        return;
+      }
       // Check how much space we have available
       var $list = $wrapper.children('ul');
 
