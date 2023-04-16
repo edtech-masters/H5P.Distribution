@@ -164,6 +164,10 @@
   content: "\F058";
 }
 
+.h5p-question-retry-button:before {
+  content: "\f01e";
+}
+
 .h5p-image-hotspot-question .submit-answer-feedback {
   color: black;
   font-size: 16px;

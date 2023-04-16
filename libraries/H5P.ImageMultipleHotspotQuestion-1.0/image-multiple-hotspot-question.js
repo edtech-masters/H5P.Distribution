@@ -26,8 +26,8 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
       },
       behaviour: {
         enableSubmitAnswer: false,
+        enableRetry: false,
         ignoreScoring: false,
-        enableRetry: true,
         enableSubmitAnswerFeedback: false,
         submissionButtonsAlignment: 'left',
         answerType: 'multi'
@@ -154,7 +154,10 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
     this.setContent(this.createContent());
 
     // Register retry button
-    this.createRetryButton();
+    if (this.params.behaviour.enableRetry) {
+      this.createRetryButton();
+      this.hideButton('retry-button');
+    }
 
     // Register submit button
     this.createSubmitButton();
@@ -290,17 +293,21 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
 
   ImageMultipleHotspotQuestion.prototype.highlightHotSpot = function (hotspot) {
     if (this.params.behaviour.answerType === 'single') {
-      const hotspots = this.wrapper.find('.image-hotspot ');
-      if (hotspots) {
-        hotspots.each(function () {
-          if ($(this).hasClass("highlight-hotspot")) {
-            $(this).toggleClass('highlight-hotspot');
-          }
-        });
-      }
+      resetHighlightHotSpot();
     }
     hotspot.toggleClass('highlight-hotspot');
   };
+
+  ImageMultipleHotspotQuestion.prototype.resetHighlightHotSpot = function () {
+    const hotspots = this.wrapper.find('.image-hotspot ');
+    if (hotspots) {
+      hotspots.each(function () {
+        if ($(this).hasClass("highlight-hotspot")) {
+          $(this).toggleClass('highlight-hotspot');
+        }
+      });
+    }
+  }
 
   /**
    * Create a feedback element for a click.
@@ -420,8 +427,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
 
     this.addButton('retry-button', 'Retry', function () {
       self.resetTask();
-      self.wrapper.find('.h5p-question-content').remove();
-    }, false);
+    }, self.params.behaviour.enableRetry);
   };
 
   /**
@@ -432,6 +438,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
 
     this.addButton('submit-answer', self.params.submitAnswer, function () {
       self.hideButton('submit-answer');
+      self.showButton('retry-button');
       if(self.params.behaviour.enableSubmitAnswerFeedback) {
         var $submit_message = `<div class="submit-answer-feedback">${self.params.submitAnswerFeedback}</div>`;
         self.wrapper.find('.h5p-question-content').append($submit_message);
@@ -513,8 +520,24 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
     // Hide retry button
     this.hideButton('retry-button');
 
+    if (this.params.behaviour.enableSubmitAnswer) {
+      this.showButton('submit-answer');
+      this.resetHighlightHotSpot();
+    }
+
     // Clear feedback
-    this.setFeedback();
+    if (this.showScoreFeedback()) {
+      this.setFeedback();
+    }
+
+    if (this.params.behaviour.enableSubmitAnswerFeedback) {
+      const submitAnswerFeedback = this.wrapper.find(
+          '.h5p-question-content').find(
+          '.submit-answer-feedback');
+      if (submitAnswerFeedback) {
+        submitAnswerFeedback.remove();
+      }
+    }
   };
 
   /**

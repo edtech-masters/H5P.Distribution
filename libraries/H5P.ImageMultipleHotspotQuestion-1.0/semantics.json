@@ -168,6 +168,13 @@
         "optional": true
       },
       {
+        "name": "enableRetry",
+        "type": "boolean",
+        "label": "Enable retry",
+        "description": "Add a retry button for the game",
+        "default": false
+      },
+      {
         "name": "ignoreScoring",
         "label": "Ignore scoring",
         "type": "boolean",
