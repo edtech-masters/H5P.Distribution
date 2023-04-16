@@ -507,6 +507,15 @@
             "label": "Right"
           }
         ]
+      },
+      {
+        "name": "hideSampleSolution",
+        "label": "Hide Sample Solution",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will not see the sample solution text",
+        "default": false,
+        "optional": true
       }
     ]
   },

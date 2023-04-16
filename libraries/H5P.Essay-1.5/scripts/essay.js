@@ -45,7 +45,8 @@ H5P.Essay = function ($, Question) {
           ignoreScoring: false,
           pointsHost: 1,
           enableSubmitAnswerFeedback: false,
-          submissionButtonsAlignment: 'left'
+          submissionButtonsAlignment: 'left',
+          hideSampleSolution: false
         },
         checkAnswer: 'Check',
         tryAgain: 'Retry',
@@ -368,6 +369,10 @@ H5P.Essay = function ($, Question) {
    * @see contract at {@link https://h5p.org/documentation/developers/contracts#guides-header-4}
    */
   Essay.prototype.showSolutions = function () {
+
+    if (this.params.behaviour.hideSampleSolution) {
+      return;
+    }
     // We add the sample solution here to make cheating at least a little more difficult
     if (this.solution.getElementsByClassName(SOLUTION_SAMPLE)[0].children.length === 0) {
       var text = document.createElement('div');
