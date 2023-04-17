@@ -293,7 +293,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
 
   ImageMultipleHotspotQuestion.prototype.highlightHotSpot = function (hotspot) {
     if (this.params.behaviour.answerType === 'single') {
-      resetHighlightHotSpot();
+      this.resetHighlightHotSpot();
     }
     hotspot.toggleClass('highlight-hotspot');
   };
