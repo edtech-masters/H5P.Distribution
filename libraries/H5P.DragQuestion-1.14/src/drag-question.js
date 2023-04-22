@@ -72,7 +72,8 @@ function C(options, contentId, contentData) {
       submissionButtonsAlignment: 'left',
       enableSubmitAnswerFeedback: false,
       ignoreScoring: false,
-      ignoreAnswerEvaluation: false
+      ignoreAnswerEvaluation: false,
+      ignoreInSummarySlide: false
     },
     a11yCheck: 'Check the answers. The responses will be marked as correct, incorrect, or unanswered.',
     a11ySubmit: 'Submit the answers.',
@@ -1092,6 +1093,10 @@ C.prototype.getCurrentState = function () {
 
 C.prototype.getTitle = function() {
   return H5P.createTitle((this.contentData && this.contentData.metadata && this.contentData.metadata.title) ? this.contentData.metadata.title : 'Drag and drop');
+};
+
+C.prototype.isIgnoreInSummarySlide = function() {
+  return this.options.behaviour.ignoreInSummarySlide;
 };
 
 /**

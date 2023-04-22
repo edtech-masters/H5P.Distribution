@@ -518,6 +518,15 @@
         "description": "If checked, learners will not able see the answer is correct or not indication after submission.",
         "default": false,
         "optional": true
+      },
+      {
+        "name": "ignoreInSummarySlide",
+        "label": "Ignore in Summary Slide",
+        "type": "boolean",
+        "importance": "low",
+        "description": "If checked, learners will not able see the this slide & score in summary slide of complex activities.",
+        "default": false,
+        "optional": true
       }
     ]
   },
