@@ -240,6 +240,14 @@
     "common": true
   },
   {
+    "name": "retryAnswer",
+    "type": "text",
+    "label": "Text for \"Retry\" button",
+    "importance": "low",
+    "default": "Retry",
+    "common": true
+  },
+  {
     "name": "submitAnswerFeedback",
     "type": "text",
     "label": "Submit answers feedback",

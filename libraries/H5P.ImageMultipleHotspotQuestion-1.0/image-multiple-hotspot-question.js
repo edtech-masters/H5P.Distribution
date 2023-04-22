@@ -33,7 +33,8 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
         answerType: 'multi'
       },
       submitAnswerFeedback: 'Your answer has been submitted!',
-      submitAnswer: 'Submit'
+      submitAnswer: 'Submit',
+      retryAnswer: 'Retry'
     };
 
     // Inheritance
@@ -91,6 +92,12 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
      * @type {Array}
      */
     this.$hotspots = [];
+
+    /**
+     * Keeps track of all correct hotspots in an array.
+     * @type {Array}
+     */
+    this.$allHotspots = [];
 
     /**
      * Keep track of selected hotspots
@@ -289,6 +296,8 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
     if (hotspot.userSettings.correct) {
       this.$hotspots.push($hotspot);
     }
+
+    this.$allHotspots.push($hotspot)
   };
 
   ImageMultipleHotspotQuestion.prototype.highlightHotSpot = function (hotspot) {
@@ -425,7 +434,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
   ImageMultipleHotspotQuestion.prototype.createRetryButton = function () {
     var self = this;
 
-    this.addButton('retry-button', 'Retry', function () {
+    this.addButton('retry-button', self.params.retryAnswer, function () {
       self.resetTask();
     }, self.params.behaviour.enableRetry);
   };
@@ -491,7 +500,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
 
     this.hotspotSettings.hotspot.forEach(function (hotspot, index) {
       if (hotspot.userSettings.correct && !foundSolution) {
-        var $correctHotspot = self.$hotspots[index];
+        var $correctHotspot = self.$allHotspots[index];
         self.createHotspotFeedback($correctHotspot, {offsetX: ($correctHotspot.width() / 2), offsetY: ($correctHotspot.height() / 2)}, hotspot);
         foundSolution = true;
       }
