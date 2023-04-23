@@ -30,7 +30,8 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
         ignoreScoring: false,
         enableSubmitAnswerFeedback: false,
         submissionButtonsAlignment: 'left',
-        answerType: 'multi'
+        answerType: 'multi',
+        noOfAnswerSelectionAllowed: -1
       },
       submitAnswerFeedback: 'Your answer has been submitted!',
       submitAnswer: 'Submit',
@@ -277,14 +278,26 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
       width: hotspot.computedSettings.width + '%',
       height: hotspot.computedSettings.height + '%'
     }).click(function (mouseEvent) {
-      if (self.selectedHotspots.indexOf(index) === -1) {
-        self.selectedHotspots.push(index); // add chosen hotspot to selectedHotspots list
-      }
 
       if(self.params.behaviour.enableSubmitAnswer) {
+        // only select max allowed answers
+        if( self.params.behaviour.answerType === 'multi'
+            && self.params.behaviour.noOfAnswerSelectionAllowed !== -1
+            && ( self.selectedHotspots.length >= self.params.behaviour.noOfAnswerSelectionAllowed
+                && !$(this).hasClass('highlight-hotspot'))) {
+          return;
+        }
         self.highlightHotSpot($(this));
       }
 
+      if ($(this).hasClass("highlight-hotspot") && self.selectedHotspots.indexOf(index) === -1) {
+        self.selectedHotspots.push(index); // add chosen hotspot to selectedHotspots list
+      } else {
+        var itemIndex = self.selectedHotspots.indexOf(index);
+        if (itemIndex !== -1) {
+          self.selectedHotspots.splice(itemIndex, 1);
+        }
+      }
       // Create new hotspot feedback
       self.createHotspotFeedback($(this), mouseEvent, hotspot);
 

@@ -228,6 +228,22 @@
             "label": "Single"
           }
         ]
+      },
+      {
+        "name": "noOfAnswerSelectionAllowed",
+        "type": "number",
+        "label": "No of answer selection allowed",
+        "description": "No of answer allowed to select by the user",
+        "importance": "high",
+        "widget": "showWhen",
+        "showWhen": {
+          "rules": [
+            {
+              "field": "answerType",
+              "equals": "multi"
+            }
+          ]
+        }
       }
     ]
   },
