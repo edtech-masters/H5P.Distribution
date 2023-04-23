@@ -533,6 +533,14 @@
         "description": "If checked, learners will not able see the answer is correct or not indication after submission.",
         "default": false,
         "optional": true
+      },
+      {
+        "name": "noOfAnswerSelectionAllowed",
+        "type": "number",
+        "label": "No of answer selection allowed",
+        "description": "No of answer allowed to select by the user",
+        "importance": "low",
+        "default":  -1
       }
     ]
   },

@@ -121,7 +121,8 @@ H5P.MultiChoice = function (options, contentId, contentData) {
       submissionButtonsAlignment: 'left',
       enableSubmitAnswerFeedback: false,
       ignoreScoring: false,
-      ignoreAnswerEvaluation: false
+      ignoreAnswerEvaluation: false,
+      noOfAnswerSelectionAllowed: -1
     }
   };
   var template = new EJS({text: texttemplate});
@@ -339,6 +340,14 @@ H5P.MultiChoice = function (options, contentId, contentData) {
       if ($ans.attr('aria-disabled') === 'true') {
         return;
       }
+
+      if(!params.behaviour.singleAnswer
+          && params.behaviour.noOfAnswerSelectionAllowed !== -1
+          && ( params.userAnswers.length >= params.behaviour.noOfAnswerSelectionAllowed
+              && !$ans.hasClass('h5p-selected'))) {
+        return;
+      }
+
       self.answered = true;
       var num = parseInt($ans.data('id'));
       if (params.behaviour.singleAnswer) {
