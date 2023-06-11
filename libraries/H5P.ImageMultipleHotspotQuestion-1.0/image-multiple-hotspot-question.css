@@ -179,6 +179,17 @@
   background-color: rgba(211, 211, 211, 0.75) !important;
 }
 
+.highlight-correct-hotspot {
+  border: 2px dashed green;
+  background-color: rgba(211, 211, 211, 0.75) !important;
+}
+
+.highlight-wrong-hotspot {
+  border: 2px dashed red;
+  background-color: rgba(211, 211, 211, 0.75) !important;
+}
+
+
 .h5p-element-inner.h5p-image-hotspot-question .h5p-question-buttons.right-align {
   width: 100% !important;
   text-align: right !important;

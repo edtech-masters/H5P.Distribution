@@ -321,7 +321,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
   };
 
   ImageMultipleHotspotQuestion.prototype.resetHighlightHotSpot = function () {
-    const hotspots = this.wrapper.find('.image-hotspot ');
+    const hotspots = this.wrapper.find('.image-hotspot');
     if (hotspots) {
       hotspots.each(function () {
         if ($(this).hasClass("highlight-hotspot")) {
@@ -508,17 +508,33 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
    * Used in contracts
    */
   ImageMultipleHotspotQuestion.prototype.showSolutions = function () {
-    var self = this;
-    var foundSolution = false;
-
-    this.hotspotSettings.hotspot.forEach(function (hotspot, index) {
-      if (hotspot.userSettings.correct && !foundSolution) {
-        var $correctHotspot = self.$allHotspots[index];
-        self.createHotspotFeedback($correctHotspot, {offsetX: ($correctHotspot.width() / 2), offsetY: ($correctHotspot.height() / 2)}, hotspot);
-        foundSolution = true;
+    this.$hotspots.forEach(hotspot => {
+      if (!hotspot.hasClass("highlight-correct-hotspot")) {
+        hotspot.removeClass('highlight-hotspot');
+        hotspot.addClass('highlight-correct-hotspot');
       }
     });
+
+    const hotspots = this.wrapper.find('.image-hotspot');
+    if (hotspots) {
+      hotspots.each(function () {
+        if ($(this).hasClass("highlight-hotspot")) {
+          $(this).toggleClass('highlight-hotspot');
+          $(this).addClass('highlight-wrong-hotspot');
+        }
+      });
+    }
   };
+
+  ImageMultipleHotspotQuestion.prototype.resetSolutionHighlight = function () {
+    const hotspots = this.wrapper.find('.image-hotspot');
+    if (hotspots) {
+      hotspots.each(function () {
+        $(this).removeClass('highlight-wrong-hotspot');
+        $(this).removeClass('highlight-correct-hotspot');
+      });
+    }
+  }
 
   /**
    * Resets the question.
@@ -545,6 +561,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
     if (this.params.behaviour.enableSubmitAnswer) {
       this.showButton('submit-answer');
       this.resetHighlightHotSpot();
+      this.resetSolutionHighlight();
     }
 
     // Clear feedback
