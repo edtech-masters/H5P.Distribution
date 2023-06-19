@@ -907,6 +907,93 @@
             }
           }
         ]
+      },
+      {
+        "name": "autoGrading",
+        "type": "group",
+        "label": "Auto Grading Activities",
+        "importance": "low",
+        "description": "These options will let you override the summary page for hiding score and show as auto grading.",
+        "optional": true,
+        "fields": [
+          {
+            "name": "H5P.Blanks",
+            "type": "boolean",
+            "label": "Fill In the Blanks",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.SingleChoiceSet",
+            "type": "boolean",
+            "label": "Single Choice Set",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.MultiChoice",
+            "type": "boolean",
+            "label": "Multiple Choice",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.TrueFalse",
+            "type": "boolean",
+            "label": "True False",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.DragQuestion",
+            "type": "boolean",
+            "label": "Drag and Drop",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.DragText",
+            "type": "boolean",
+            "label": "Drag the Words",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.MarkTheWords",
+            "type": "boolean",
+            "label": "Mark the Words",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.InteractiveVideo",
+            "type": "boolean",
+            "label": "Interactive Video",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.Essay",
+            "type": "boolean",
+            "label": "Essay",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.ImageMultipleHotspotQuestion",
+            "type": "boolean",
+            "label": "Image Multiple Hotspot Question",
+            "importance": "low",
+            "default": false
+          },
+          {
+            "name": "H5P.MemoryGame",
+            "type": "boolean",
+            "label": "Memory Game",
+            "importance": "low",
+            "default": false
+          }
+        ]
       }
     ]
   }
