@@ -2223,6 +2223,74 @@ class H5PCore {
     return $params;
   }
 
+    /**
+     * Filter content run parameters, rebuild content dependency cache without export for preview and edit activities
+     *
+     * @param Object|array $content
+     * @return Object NULL on failure.
+     */
+  public function filterParametersWithoutExport(&$content) {
+      if (!empty($content['filtered'])) {
+          return $content['filtered'];
+      }
+
+      if (!(isset($content['library']) && isset($content['params']))) {
+          return NULL;
+      }
+
+      // Validate and filter against main library semantics.
+      $validator = new H5PContentValidator($this->h5pF, $this);
+      $params = (object) array(
+          'library' => H5PCore::libraryToString($content['library']),
+          'params' => json_decode($content['params'])
+      );
+      if (!$params->params) {
+          return NULL;
+      }
+      $validator->validateLibrary($params, (object) array('options' => array($params->library)));
+
+      // Handle addons:
+      $addons = $this->h5pF->loadAddons();
+      foreach ($addons as $addon) {
+          $add_to = json_decode($addon['addTo']);
+
+          if (isset($add_to->content->types)) {
+              foreach($add_to->content->types as $type) {
+
+                  if (isset($type->text->regex) &&
+                      $this->textAddonMatches($params->params, $type->text->regex)) {
+                      $validator->addon($addon);
+
+                      // An addon shall only be added once
+                      break;
+                  }
+              }
+          }
+      }
+
+      $params = json_encode($params->params);
+
+      // Update content dependencies.
+      $content['dependencies'] = $validator->getDependencies();
+
+      // Sometimes the parameters are filtered before content has been created
+      if ($content['id']) {
+          $this->h5pF->deleteLibraryUsage($content['id']);
+          $this->h5pF->saveLibraryUsage($content['id'], $content['dependencies']);
+
+          if (!$content['slug']) {
+              $content['slug'] = $this->generateContentSlug($content);
+          }
+
+          // Cache.
+          $this->h5pF->updateContentFields($content['id'], array(
+              'filtered' => $params,
+              'slug' => $content['slug']
+          ));
+      }
+      return $params;
+  }
+
   /**
    * Retrieve a value from a nested mixed array structure.
    *
