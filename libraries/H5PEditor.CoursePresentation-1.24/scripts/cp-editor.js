@@ -23,7 +23,9 @@ H5PEditor.CoursePresentation = function (parent, field, params, setValue) {
     params = {
       slides: [{
         elements: [],
-        keywords: []
+        keywords: [],
+        totalGrades: '',
+        gradedManually: false
       }]
     };
 
@@ -315,6 +317,8 @@ H5PEditor.CoursePresentation.prototype.appendTo = function ($wrapper) {
       that.resetSubContentId(newSlide.elements);
 
       newSlide.keywords = [];
+      newSlide.totalGrades = '';
+      newSlide.gradedManually = false;
       that.addSlide(newSlide);
       H5P.ContinuousText.Engine.run(that);
       that.updateSlidesSidebar();
@@ -1007,6 +1011,7 @@ H5PEditor.CoursePresentation.prototype.initKeywordMenu = function () {
 
   // Make existing keywords editable
   this.cp.$keywords.find('.h5p-keyword-title').click(keywordClick);
+  this.cp.$keywords.find('.h5p-total-grades').click(keywordClick);
 };
 
 
@@ -1023,7 +1028,8 @@ H5PEditor.CoursePresentation.prototype.addSlide = function (slideParams) {
     // Set new slide params
     slideParams = {
       elements: [],
-      keywords: []
+      keywords: [],
+
     };
   }
 
@@ -1176,32 +1182,35 @@ H5PEditor.CoursePresentation.prototype.animateNavigationLine = function (directi
 H5PEditor.CoursePresentation.prototype.updateSlidesSidebar = function () {
   var self = this;
   var $keywords = this.cp.$keywords.children();
+  var cp = this.cp;
 
   // Update the sub titles
   $keywords.each(function (index) {
 
     var $keyword = H5PEditor.$(this);
 
-    $keyword.find('.h5p-keyword-subtitle').html(self.cp.l10n.slide + ' ' + (index + 1));
+    $keyword.find('.h5p-keyword-subtitle').html(
+        self.cp.l10n.slide + ' ' + (index + 1));
     $keyword.find('.joubel-icon-edit').remove();
 
     var $editIcon = H5PEditor.$(
-      '<a href="#" class="joubel-icon-edit h5p-hidden" title="' + H5PEditor.t('H5PEditor.CoursePresentation', 'edit') + '" tabindex="0">' +
+        '<a href="#" id="keywords-title" class="joubel-icon-edit h5p-hidden" title="' + H5PEditor.t(
+        'H5PEditor.CoursePresentation', 'edit') + '" tabindex="0">' +
         '<span class="h5p-icon-circle"></span>' +
         '<span class="h5p-icon-pencil"></span>' +
-      '</a>'
+        '</a>'
     ).click(function () {
       // If clicked is not already active, do a double click
-      if (!H5PEditor.$(this).parents('[role="menuitem"]').hasClass('h5p-current')) {
-        H5PEditor.$(this).siblings('span').click().click();
+      if (!H5PEditor.$(this).parents('[role="menuitem"]').hasClass(
+          'h5p-current')) {
+        H5PEditor.$(this).siblings('span').filter('.h5p-keyword-title').click().click();
+      } else {
+        H5PEditor.$(this).siblings('span').filter('.h5p-keyword-title').click();
       }
-      else {
-        H5PEditor.$(this).siblings('span').click();
-      }
-      $editIcon.siblings('textarea').select();
+      $editIcon.siblings('textarea').filter('.h5p-title').select();
       return false;
     }).keydown(function (event) {
-      if ([13,32].indexOf(event.which) !== -1) {
+      if ([13, 32].indexOf(event.which) !== -1) {
         H5PEditor.$(this).click();
         return false;
       }
@@ -1226,6 +1235,56 @@ H5PEditor.CoursePresentation.prototype.updateSlidesSidebar = function () {
       if (e.relatedTarget && e.relatedTarget.className !== 'joubel-icon-edit' || !e.relatedTarget) {
         $editIcon.addClass('h5p-hidden');
       }
+    });
+
+    var $totalGradesEditIcon = H5PEditor.$(
+        '<a href="#" id="total-grades" class="joubel-icon-edit h5p-hidden" title="' + H5PEditor.t(
+        'H5PEditor.CoursePresentation', 'edit') + '" tabindex="0">' +
+        '<span class="h5p-icon-circle"></span>' +
+        '<span class="h5p-icon-pencil"></span>' +
+        '</a>'
+    ).click(function () {
+      // If clicked is not already active, do a double click
+      if (!H5PEditor.$(this).parents('[role="menuitem"]').hasClass(
+          'h5p-current')) {
+        H5PEditor.$(this).siblings('span').filter('.h5p-total-grades').click().click();
+      } else {
+        H5PEditor.$(this).siblings('span').filter('.h5p-total-grades').first().click();
+      }
+      $totalGradesEditIcon.siblings('textarea').filter('.total-grades').first().select();
+      return false;
+    }).keydown(function (event) {
+      if ([13, 32].indexOf(event.which) !== -1) {
+        H5PEditor.$(this).click();
+        return false;
+      }
+
+      // Ignore arrow keys for now to avoid JS-error
+      if (event.which >= 37 && event.which <= 40) {
+        return false;
+      }
+    }).blur(function () {
+      $totalGradesEditIcon.addClass('h5p-hidden');
+    }).appendTo($keywords.eq(index));
+
+    H5PEditor.$(this).focus(function () {
+      $totalGradesEditIcon.removeClass('h5p-hidden');
+    }).hover(function () {
+      if (!H5PEditor.$(this).hasClass('h5p-editing')) {
+        $totalGradesEditIcon.removeClass('h5p-hidden');
+      }
+    }).mouseleave(function () {
+      $totalGradesEditIcon.addClass('h5p-hidden');
+    }).blur(e => {
+      if (e.relatedTarget && e.relatedTarget.className !== 'joubel-icon-edit' || !e.relatedTarget) {
+        $totalGradesEditIcon.addClass('h5p-hidden');
+      }
+    });
+
+    var checkbox = $keyword.find('input');
+    checkbox.change(function() {
+      var slideIndex = self.cp.$current.index();
+      self.params.slides[slideIndex].gradedManually = this.checked;
     });
   });
 };
@@ -1331,19 +1390,21 @@ H5PEditor.CoursePresentation.prototype.editKeyword = function ($span) {
     return false; // Can only edit title for the current slide
   }
 
-  var oldTitle = $span.text(); // Used for reset / cancel
   var slideIndex = that.cp.$current.index();
-  if (!that.params.slides[slideIndex].keywords || !that.params.slides[slideIndex].keywords.length) {
-    oldTitle = ''; // Prevent editing 'No title' string
-  }
 
-  var $delete = H5PEditor.$(
-    '<a href="#" class="joubel-icon-cancel" title="' + H5PEditor.t('H5PEditor.CoursePresentation', 'cancel') + '">' +
-      '<span class="h5p-icon-circle"></span>' +
-      '<span class="h5p-icon-cross"></span>' +
-    '</a>');
+  if ($span.hasClass('h5p-keyword-title')) {
+    var oldTitle = $span.text(); // Used for reset / cancel
+    if (!that.params.slides[slideIndex].keywords || !that.params.slides[slideIndex].keywords.length) {
+      oldTitle = ''; // Prevent editing 'No title' string
+    }
 
-  var $textarea = H5PEditor.$('<textarea></textarea>')
+    var $delete = H5PEditor.$(
+        '<a href="#" class="joubel-icon-cancel" title="' + H5PEditor.t('H5PEditor.CoursePresentation', 'cancel') + '">' +
+        '<span class="h5p-icon-circle"></span>' +
+        '<span class="h5p-icon-cross"></span>' +
+        '</a>');
+
+    var $textarea = H5PEditor.$('<textarea id="h5p-title" class="h5p-title"></textarea>')
     .val(oldTitle)
     .insertBefore($span.hide())
     .keydown(function (event) {
@@ -1370,26 +1431,99 @@ H5PEditor.CoursePresentation.prototype.editKeyword = function ($span) {
       }
     }).focus();
 
-  $textarea.keyup();
+    $textarea.keyup();
 
-  $delete.insertAfter($textarea).click(function (e) {
-    e.preventDefault();
-    $textarea.val(oldTitle).blur();
-    H5PEditor.$('[role="menuitem"].h5p-current').focus();
-  }).keydown(function (e) {
-    if ([32,13].indexOf(e.which) !== -1) {
-      H5PEditor.$(this).click();
-      return false;
+    $delete.insertAfter($textarea).click(function (e) {
+      e.preventDefault();
+      $textarea.val(oldTitle).blur();
+      H5PEditor.$('[role="menuitem"].h5p-current').focus();
+    }).keydown(function (e) {
+      if ([32,13].indexOf(e.which) !== -1) {
+        H5PEditor.$(this).click();
+        return false;
+      }
+      // Ignore arrow keys for now to avoid JS-error
+      if (e.which >= 37 && e.which <= 40) {
+        return false;
+      }
+    }).blur(function (e) {
+      if (e.relatedTarget && e.relatedTarget.tagName !== 'TEXTAREA' || !e.relatedTarget) {
+        $textarea.blur();
+      }
+    });
+  }
+
+
+  if ($span.hasClass('h5p-total-grades')) {
+    var oldTotalGrades = $span.text();
+    if (!that.params.slides[slideIndex].totalGrades || isNaN(that.params.slides[slideIndex].totalGrades)) {
+      oldTotalGrades = 'No Total Grades';
     }
-    // Ignore arrow keys for now to avoid JS-error
-    if (e.which >= 37 && e.which <= 40) {
-      return false;
-    }
-  }).blur(function (e) {
-    if (e.relatedTarget && e.relatedTarget.tagName !== 'TEXTAREA' || !e.relatedTarget) {
-      $textarea.blur();
-    }
-  });
+
+    var $deleteTotalGrades = H5PEditor.$(
+        '<a href="#" id="total-grades" class="joubel-icon-cancel" title="' + H5PEditor.t('H5PEditor.CoursePresentation', 'cancel') + '">' +
+        '<span class="h5p-icon-circle"></span>' +
+        '<span class="h5p-icon-cross"></span>' +
+        '</a>');
+
+    var $totalGradesTextarea = H5PEditor.$('<textarea id="total-grades" class="total-grades"></textarea>')
+    .val(oldTotalGrades)
+    .insertBefore($span.hide())
+    .keydown(function (event) {
+      if (event.keyCode === 13) {
+        $totalGradesTextarea.blur();
+        $li.focus();
+        return false;
+      }
+
+      // don't propagate key events from textarea
+      event.stopPropagation();
+    }).keyup(function () {
+      $totalGradesTextarea.css('height', $totalGradesTextarea[0].scrollHeight);
+    }).blur(function (event) {
+      if (event.relatedTarget && event.relatedTarget.className !== 'joubel-icon-cancel' || !event.relatedTarget) {
+        var totalGrades = $totalGradesTextarea.val(); // Text not HTML
+
+        // Update params
+        if (!isNaN(totalGrades)) {
+          that.params.slides[slideIndex].totalGrades = totalGrades;
+        }
+        else {
+          delete that.params.slides[slideIndex].totalGrades;
+        }
+
+        // Update keyword list item
+        H5PEditor.$('[role="menuitem"].h5p-current .h5p-total-grades').text(totalGrades);
+
+        // Remove textarea
+        $li.removeClass('h5p-editing');
+        $span.css({'display': 'inline-block'});
+        $totalGradesTextarea.add($deleteTotalGrades).remove();
+      }
+    }).focus();
+
+    $totalGradesTextarea.keyup();
+
+    $deleteTotalGrades.insertAfter($totalGradesTextarea).click(function (e) {
+      e.preventDefault();
+      $totalGradesTextarea.val(oldTotalGrades).blur();
+      H5PEditor.$('[role="menuitem"].h5p-current').focus();
+    }).keydown(function (e) {
+      if ([32,13].indexOf(e.which) !== -1) {
+        H5PEditor.$(this).click();
+        return false;
+      }
+      // Ignore arrow keys for now to avoid JS-error
+      if (e.which >= 37 && e.which <= 40) {
+        return false;
+      }
+    }).blur(function (e) {
+      if (e.relatedTarget && e.relatedTarget.tagName !== 'TEXTAREA' || !e.relatedTarget) {
+        $totalGradesTextarea.blur();
+      }
+    });
+  }
+
 };
 
 /**

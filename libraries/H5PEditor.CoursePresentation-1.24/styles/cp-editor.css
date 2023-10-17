@@ -210,6 +210,23 @@
 .h5p-course-presentation .joubel-icon-cancel:focus .h5p-icon-circle:before {
   outline: -webkit-focus-ring-color auto 5px;
 }
+
+.h5p-course-presentation .joubel-icon-edit#total-grades,
+.h5p-course-presentation .joubel-icon-cancel#total-grades {
+  position: absolute;
+  font-size: 1.75em;
+  line-height: inherit;
+  top: 1.8em;
+}
+.h5p-course-presentation .joubel-icon-edit#total-grades,
+.h5p-course-presentation .joubel-icon-cancel#total-grades {
+  right: 0.7em;
+}
+.h5p-course-presentation .joubel-icon-edit#total-grades:focus .h5p-icon-circle:before,
+.h5p-course-presentation .joubel-icon-cancel#total-grades:focus .h5p-icon-circle:before {
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
 .h5p-course-presentation .h5p-moving {
   position: absolute;
   cursor: move;
