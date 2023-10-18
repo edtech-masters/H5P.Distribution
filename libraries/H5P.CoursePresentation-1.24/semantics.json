@@ -229,6 +229,20 @@
               }
             },
             {
+              "name": "totalGrades",
+              "type": "text",
+              "label": "Total Grades",
+              "importance": "low",
+              "default": ""
+            },
+            {
+              "name": "gradedManually",
+              "type": "boolean",
+              "label": "Grade Manually",
+              "importance": "low",
+              "default": false
+            },
+            {
               "name": "slideBackgroundSelector",
               "importance": "medium",
               "type": "group",
