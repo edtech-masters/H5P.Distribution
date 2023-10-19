@@ -482,7 +482,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
    * @returns {boolean}
    */
   ImageMultipleHotspotQuestion.prototype.getAnswerGiven = function () {
-    return this.hotspotChosen;
+    return this.hotspotChosen || this.selectedHotspots.length > 0;
   };
 
   /**
