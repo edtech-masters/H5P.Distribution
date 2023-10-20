@@ -508,7 +508,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
    * Used in contracts
    */
   ImageMultipleHotspotQuestion.prototype.showSolutions = function () {
-    this.$hotspots.forEach(hotspot => {
+    /*this.$hotspots.forEach(hotspot => {
       if (!hotspot.hasClass("highlight-correct-hotspot")) {
         hotspot.removeClass('highlight-hotspot');
         hotspot.addClass('highlight-correct-hotspot');
@@ -523,7 +523,7 @@ H5P.ImageMultipleHotspotQuestion = (function ($, Question) {
           $(this).addClass('highlight-wrong-hotspot');
         }
       });
-    }
+    }*/
   };
 
   ImageMultipleHotspotQuestion.prototype.resetSolutionHighlight = function () {
